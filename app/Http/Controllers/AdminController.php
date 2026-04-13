@@ -71,7 +71,7 @@ class AdminController extends Controller
         $order = Order::findOrFail($id);
         $order->update(['order_status' => $request->order_status]);
         
-        return back()->with('success', 'Status order berhasil diupdate!');
+        return redirect('/admin/dashboard')->with('success', 'Status order berhasil diupdate!');
     }
 }
 

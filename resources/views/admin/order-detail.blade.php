@@ -11,10 +11,10 @@
 
 {{-- Navbar --}}
 <nav class="bg-gray-900 text-white px-6 py-4 flex items-center justify-between">
-    <div class="flex items-center gap-3">
+    <a href="/admin/dashboard" class="flex items-center gap-3 hover:opacity-80 transition">
         <span class="text-2xl">🌯</span>
         <span class="font-bold text-lg">Biterito Admin</span>
-    </div>
+    </a>
     <a href="/admin/logout" class="text-gray-400 hover:text-white text-sm transition">Logout →</a>
 </nav>
 

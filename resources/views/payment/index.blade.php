@@ -39,7 +39,6 @@
     {{-- QRIS Payment --}}
     <div class="bg-white rounded-2xl shadow-md p-6 text-center mb-6">
         <p class="font-bold text-gray-800 mb-2">Scan QRIS untuk Membayar</p>
-        <p class="text-gray-500 text-sm mb-4">Nominal sudah otomatis terisi ✨</p>
 
         <button id="pay-button"
             class="w-full bg-red-600 text-white py-4 rounded-2xl font-bold text-lg hover:bg-red-700 transition active:scale-95">

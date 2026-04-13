@@ -11,7 +11,7 @@
 
 <div class="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
     <div class="text-center mb-8">
-        <p class="text-4xl mb-2">🌯</p>
+        <p class="text-4xl mb-2"></p>
         <h1 class="text-2xl font-bold text-gray-800">Biterito Admin</h1>
         <p class="text-gray-500 text-sm mt-1">Masuk ke dashboard admin</p>
     </div>
@@ -26,7 +26,7 @@
         @csrf
         <div class="mb-4">
             <label class="text-sm font-medium text-gray-600">Email</label>
-            <input type="email" name="email" placeholder="admin@biterito.com"
+            <input type="email" name="email" placeholder="hayoapa@gmail.com"
                 class="w-full mt-1 border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-400">
         </div>
         <div class="mb-6">

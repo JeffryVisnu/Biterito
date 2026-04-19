@@ -2,50 +2,73 @@
 
 @section('content')
 
+<style>
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+@media (min-width: 640px) {
+    .menu-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+@media (min-width: 1024px) {
+    .menu-grid { grid-template-columns: repeat(3, 1fr) !important; }
+}
+</style>
+
 {{-- Hero Section --}}
-<section class="text-white py-10 px-4 relative overflow-hidden" style="background: linear-gradient(135deg, #B71C1C 0%, #7a1010 60%, #4a0a0a 100%);">
+<section style="color: white; padding: 2rem 1rem 2.5rem; position: relative; overflow: hidden; background: linear-gradient(135deg, #f4a738 0%, #db5c26 45%, #b73f2e 100%);">
+
     {{-- Decorative food emojis background --}}
-    <div class="absolute inset-0 pointer-events-none select-none overflow-hidden" style="opacity: 0.08; font-size: 3rem; line-height: 1;">
-        <span class="absolute" style="top: 8%; left: 4%;">🌯</span>
-        <span class="absolute" style="top: 55%; left: 2%;">🥤</span>
-        <span class="absolute" style="top: 20%; left: 14%;">🍟</span>
-        <span class="absolute" style="top: 65%; left: 12%;">🌶️</span>
-        <span class="absolute" style="top: 10%; right: 5%;">🧆</span>
-        <span class="absolute" style="top: 60%; right: 3%;">🥙</span>
-        <span class="absolute" style="top: 30%; right: 14%;">🍗</span>
-        <span class="absolute" style="top: 72%; right: 12%;">🧃</span>
+    <div style="position: absolute; inset: 0; pointer-events: none; overflow: hidden; opacity: 0.08; font-size: 3rem; line-height: 1;">
+        <span style="position: absolute; top: 8%; left: 4%;">🌯</span>
+        <span style="position: absolute; top: 55%; left: 2%;">🥤</span>
+        <span style="position: absolute; top: 20%; left: 14%;">🍟</span>
+        <span style="position: absolute; top: 65%; left: 12%;">🌶️</span>
+        <span style="position: absolute; top: 10%; right: 5%;">🧆</span>
+        <span style="position: absolute; top: 60%; right: 3%;">🥙</span>
+        <span style="position: absolute; top: 30%; right: 14%;">🍗</span>
+        <span style="position: absolute; top: 72%; right: 12%;">🧃</span>
     </div>
 
-    <div class="max-w-6xl mx-auto text-center relative z-10">
-        {{-- Logo lebih kecil --}}
-        <img src="{{ asset('logo_biterito.png') }}" alt="Biterito" class="h-28 md:h-36 mx-auto mb-3 object-contain drop-shadow-xl">
+    <div style="max-width: 72rem; margin: 0 auto; text-align: center; position: relative; z-index: 10;">
+
+        {{-- Logo --}}
+        <div style="display: flex; justify-content: center; margin-bottom: 0.75rem;">
+            <div style="background-color: #e4dec4; border-radius: 18px; padding: 8px 20px; display: inline-flex; align-items: center;">
+                <img src="{{ asset('logoasli.PNG') }}" alt="Biterito"
+                     style="height: 5.5rem; width: auto; object-fit: contain;"
+                     onerror="this.style.display='none'; document.getElementById('hero-logo-text').style.display='block'">
+                <span id="hero-logo-text" style="display:none; font-family:'Fredoka',sans-serif; font-size:1.75rem; font-weight:700; color:#b73f2e;">Biterito</span>
+            </div>
+        </div>
 
         {{-- Tagline --}}
-        <h1 class="text-2xl md:text-3xl font-bold mb-1" style="font-family: 'Fredoka', sans-serif; color: #fff; letter-spacing: 0.5px;">
+        <h1 style="font-family: 'Fredoka', sans-serif; color: #fff; letter-spacing: 0.5px; font-size: 1.5rem; font-weight: 700; margin: 0 0 0.3rem;">
             Rasa Lokal dalam Setiap Gigitan
         </h1>
-        <p class="text-sm md:text-base mb-5" style="color: #fcd5d5;">
+        <p style="color: #fcd5d5; font-size: 0.875rem; margin: 0 0 1.25rem;">
             Pesan makanan & minuman favoritmu langsung dari dapur Biterito
         </p>
 
         {{-- Badges --}}
-        <div class="flex items-center justify-center gap-3 flex-wrap mb-5">
-            <span class="text-white px-4 py-1.5 rounded-full text-sm font-semibold shadow" style="background-color: #F9A825;">
-                🔥 Pre-Order Sekarang!
+        <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.25rem;">
+            <span style="color: white; padding: 0.35rem 0.9rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 600; background-color: #f69304; display: inline-block;">
+                💰 Harga Terjangkau
             </span>
-            <span class="text-white px-4 py-1.5 rounded-full text-sm font-semibold shadow" style="background-color: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);">
-                🚀 Cepat & Segar
+            <span style="color: white; padding: 0.35rem 0.9rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 600; background-color: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); display: inline-block;">
+                🌶️ Cita Rasa Nusantara
             </span>
-            <span class="text-white px-4 py-1.5 rounded-full text-sm font-semibold shadow" style="background-color: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);">
-                💚 Bahan Lokal
+            <span style="color: white; padding: 0.35rem 0.9rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 600; background-color: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); display: inline-block;">
+                📦 Fresh & Pre-Order
             </span>
         </div>
 
         {{-- Scroll to menu button --}}
-        <a href="#menu-section" class="inline-flex items-center gap-2 text-sm font-semibold transition"
-           style="color: #F9A825;" onmouseover="this.style.color='#ffd54f'" onmouseout="this.style.color='#F9A825'">
+        <a href="#menu-section"
+           style="display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.875rem; font-weight: 600; color: #f69304; text-decoration: none;"
+           onmouseover="this.style.color='#f7b93c'" onmouseout="this.style.color='#f69304'">
             Lihat Menu
-            <svg class="w-4 h-4 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg style="width: 1rem; height: 1rem; animation: bounce 1s infinite;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
             </svg>
         </a>
@@ -53,33 +76,32 @@
 </section>
 
 {{-- Menu Section --}}
-<section id="menu-section" class="max-w-6xl mx-auto px-4 py-10">
+<section id="menu-section" style="max-width: 72rem; margin: 0 auto; padding: 2rem 1rem 2.5rem;">
 
     {{-- Makanan --}}
-    <h2 class="text-2xl font-bold mb-6 flex items-center gap-2" style="color: #B71C1C; font-family: 'Fredoka', sans-serif; font-size: 1.6rem; margin-left: 20px;">
-        <span>Makanan</span>
+    <h2 style="color: #b73f2e; font-family: 'Fredoka', sans-serif; font-size: 1.6rem; font-weight: 700; margin: 0 0 1.5rem 4px;">
+        Makanan
     </h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+    <div class="menu-grid" style="display: grid; grid-template-columns: repeat(1, 1fr); gap: 1.25rem; margin-bottom: 2.5rem;">
         @foreach($products->where('category', 'makanan') as $product)
-        <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition flex flex-col" style="border: 2px solid #fde8e8;">
-            <div class="h-48 flex items-center justify-center" style="background: linear-gradient(135deg, #F9A825 0%, #e53935 100%);">
+        <div style="background: white; border-radius: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden; display: flex; flex-direction: column; border: 2px solid #e4dec4;">
+            <div style="height: 12rem; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #f4a738 0%, #b73f2e 100%); overflow: hidden; flex-shrink: 0;">
                 @if($product->image)
-                    <img src="{{ asset('images/products/'.$product->image) }}" class="h-full w-full object-cover">
+                    <img src="{{ asset('images/products/'.$product->image) }}" style="height: 100%; width: 100%; object-fit: cover; display: block;">
                 @else
-                    <span class="text-7xl">🌯</span>
+                    <span style="font-size: 4.5rem; line-height: 1;">🌯</span>
                 @endif
             </div>
-            <div class="p-4 flex flex-col flex-1">
-                <h3 class="font-bold text-lg" style="color: #3a0a0a; font-family: 'Fredoka', sans-serif; font-size: 1.1rem;">{{ $product->name }}</h3>
-                <p class="text-sm mt-1" style="color: #7a5a5a;">{{ $product->description }}</p>
-                <div class="flex items-center justify-between mt-auto pt-4">
-                    <span class="font-extrabold text-xl" style="color: #B71C1C;">
+            <div style="padding: 1rem; display: flex; flex-direction: column; flex: 1;">
+                <h3 style="font-weight: 700; font-size: 1.05rem; color: #400a0f; font-family: 'Fredoka', sans-serif; margin: 0 0 0.2rem;">{{ $product->name }}</h3>
+                <p style="font-size: 0.85rem; color: #7a5a5a; margin: 0; flex: 1;">{{ $product->description }}</p>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid #f0ebe0;">
+                    <span style="font-weight: 800; font-size: 1.15rem; color: #b73f2e;">
                         Rp {{ number_format($product->price, 0, ',', '.') }}
                     </span>
                     <button onclick="addToCart({{ $product->id }}, '{{ $product->name }}', {{ $product->price }})"
-                        class="text-white px-4 py-2 rounded-full font-semibold transition active:scale-95"
-                        style="background-color: #B71C1C; font-family: 'Fredoka', sans-serif;"
-                        onmouseover="this.style.backgroundColor='#7a1010'" onmouseout="this.style.backgroundColor='#B71C1C'">
+                        style="background-color: #b73f2e; color: white; padding: 0.45rem 1rem; border-radius: 9999px; font-weight: 600; font-family: 'Fredoka', sans-serif; border: none; cursor: pointer; font-size: 0.9rem; transition: background-color 0.15s;"
+                        onmouseover="this.style.backgroundColor='#993623'" onmouseout="this.style.backgroundColor='#b73f2e'">
                         + Tambah
                     </button>
                 </div>
@@ -89,30 +111,29 @@
     </div>
 
     {{-- Minuman --}}
-    <h2 class="text-2xl font-bold mb-6 flex items-center gap-2" style="color: #B71C1C; font-family: 'Fredoka', sans-serif; font-size: 1.6rem; margin-left: 20px">
-        <span>Minuman</span>
+    <h2 style="color: #b73f2e; font-family: 'Fredoka', sans-serif; font-size: 1.6rem; font-weight: 700; margin: 0 0 1.5rem 4px;">
+        Minuman
     </h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="menu-grid" style="display: grid; grid-template-columns: repeat(1, 1fr); gap: 1.25rem;">
         @foreach($products->where('category', 'minuman') as $product)
-        <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition flex flex-col" style="border: 2px solid #fde8e8;">
-            <div class="h-48 flex items-center justify-center" style="background: linear-gradient(135deg, #F9A825 0%, #c97a00 100%);">
+        <div style="background: white; border-radius: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden; display: flex; flex-direction: column; border: 2px solid #e4dec4;">
+            <div style="height: 12rem; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #f7b93c 0%, #db5c26 100%); overflow: hidden; flex-shrink: 0;">
                 @if($product->image)
-                    <img src="{{ asset('images/products/'.$product->image) }}" class="h-full w-full object-cover">
+                    <img src="{{ asset('images/products/'.$product->image) }}" style="height: 100%; width: 100%; object-fit: cover; display: block;">
                 @else
-                    <span class="text-7xl">🥤</span>
+                    <span style="font-size: 4.5rem; line-height: 1;">🥤</span>
                 @endif
             </div>
-            <div class="p-4 flex flex-col flex-1">
-                <h3 class="font-bold text-lg" style="color: #3a0a0a; font-family: 'Fredoka', sans-serif; font-size: 1.1rem;">{{ $product->name }}</h3>
-                <p class="text-sm mt-1" style="color: #7a5a5a;">{{ $product->description }}</p>
-                <div class="flex items-center justify-between mt-auto pt-4">
-                    <span class="font-extrabold text-xl" style="color: #c97a00;">
+            <div style="padding: 1rem; display: flex; flex-direction: column; flex: 1;">
+                <h3 style="font-weight: 700; font-size: 1.05rem; color: #400a0f; font-family: 'Fredoka', sans-serif; margin: 0 0 0.2rem;">{{ $product->name }}</h3>
+                <p style="font-size: 0.85rem; color: #7a5a5a; margin: 0; flex: 1;">{{ $product->description }}</p>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid #f0ebe0;">
+                    <span style="font-weight: 800; font-size: 1.15rem; color: #db5c26;">
                         Rp {{ number_format($product->price, 0, ',', '.') }}
                     </span>
                     <button onclick="addToCart({{ $product->id }}, '{{ $product->name }}', {{ $product->price }})"
-                        class="text-white px-4 py-2 rounded-full font-semibold transition active:scale-95"
-                        style="background-color: #c97a00; font-family: 'Fredoka', sans-serif;"
-                        onmouseover="this.style.backgroundColor='#9a5a00'" onmouseout="this.style.backgroundColor='#c97a00'">
+                        style="background-color: #db5c26; color: white; padding: 0.45rem 1rem; border-radius: 9999px; font-weight: 600; font-family: 'Fredoka', sans-serif; border: none; cursor: pointer; font-size: 0.9rem; transition: background-color 0.15s;"
+                        onmouseover="this.style.backgroundColor='#b5402c'" onmouseout="this.style.backgroundColor='#db5c26'">
                         + Tambah
                     </button>
                 </div>
@@ -123,7 +144,8 @@
 </section>
 
 {{-- Toast Notification --}}
-<div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 text-white px-6 py-3 rounded-full shadow-lg font-semibold z-50 hidden transition-all" style="background-color: #B71C1C; font-family: 'Fredoka', sans-serif; border: 2px solid #F9A825;">
+<div id="toast"
+     style="position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); color: white; padding: 0.75rem 1.5rem; border-radius: 9999px; box-shadow: 0 4px 16px rgba(0,0,0,0.2); font-weight: 600; z-index: 50; display: none; background-color: #b73f2e; font-family: 'Fredoka', sans-serif; border: 2px solid #f69304; white-space: nowrap;">
 </div>
 
 @endsection
@@ -152,8 +174,8 @@
     function showToast(message) {
         const toast = document.getElementById('toast');
         toast.textContent = message;
-        toast.classList.remove('hidden');
-        setTimeout(() => toast.classList.add('hidden'), 2500);
+        toast.style.display = 'block';
+        setTimeout(() => toast.style.display = 'none', 2500);
     }
 
     updateCartCount();

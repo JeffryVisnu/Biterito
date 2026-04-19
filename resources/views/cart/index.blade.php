@@ -2,79 +2,249 @@
 
 @section('content')
 
-<section class="max-w-2xl mx-auto px-4 py-10">
-    <h1 class="text-2xl font-bold text-gray-800 mb-6">🛒 Keranjang Belanja</h1>
+<style>
+    .cart-section {
+        max-width: 42rem;
+        margin: 0 auto;
+        padding: 1.5rem 1rem 2rem;
+    }
+    .cart-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #400a0f;
+        margin: 0 0 1.25rem;
+        font-family: 'Fredoka', sans-serif;
+    }
+    .cart-card {
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        padding: 1rem;
+        margin-bottom: 0.85rem;
+        border: 1px solid #e4dec4;
+    }
+    .cart-item {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+    }
+    .cart-item-info { flex: 1; min-width: 0; }
+    .cart-item-name {
+        font-weight: 600;
+        color: #400a0f;
+        font-size: 0.95rem;
+        margin: 0 0 0.2rem;
+        font-family: 'Fredoka', sans-serif;
+    }
+    .cart-item-price {
+        font-weight: 700;
+        color: #b73f2e;
+        font-size: 0.9rem;
+        margin: 0 0 0.3rem;
+    }
+    .cart-note-input {
+        width: 100%;
+        font-size: 0.8rem;
+        border: 1px solid #e0d8cc;
+        border-radius: 0.5rem;
+        padding: 0.3rem 0.6rem;
+        outline: none;
+        font-family: 'Fredoka', sans-serif;
+        box-sizing: border-box;
+    }
+    .cart-note-input:focus { border-color: #f69304; }
+    .qty-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        flex-shrink: 0;
+    }
+    .qty-btn {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 9999px;
+        border: none;
+        background: #f0ebe0;
+        color: #400a0f;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .qty-btn:hover { background: #e4dec4; }
+    .qty-num {
+        font-weight: 700;
+        color: #400a0f;
+        min-width: 1.2rem;
+        text-align: center;
+        font-size: 0.95rem;
+    }
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #7a5a5a;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+    .summary-divider {
+        border: none;
+        border-top: 1px solid #e4dec4;
+        margin: 0.6rem 0;
+    }
+    .summary-total {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 700;
+        font-size: 1.05rem;
+        color: #400a0f;
+    }
+    .form-group { margin-bottom: 0.85rem; }
+    .form-label {
+        display: block;
+        font-size: 0.85rem;
+        color: #7a5a5a;
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+    }
+    .form-input {
+        width: 100%;
+        border: 1.5px solid #d6cfc2;
+        border-radius: 0.75rem;
+        padding: 0.55rem 0.9rem;
+        font-size: 0.9rem;
+        font-family: 'Fredoka', sans-serif;
+        outline: none;
+        box-sizing: border-box;
+        background: white;
+        color: #400a0f;
+    }
+    .form-input:focus { border-color: #f69304; box-shadow: 0 0 0 2px rgba(246,147,4,0.15); }
+    .checkout-btn {
+        width: 100%;
+        padding: 0.9rem;
+        border-radius: 1rem;
+        border: none;
+        background-color: #b73f2e;
+        color: white;
+        font-size: 1.1rem;
+        font-weight: 700;
+        font-family: 'Fredoka', sans-serif;
+        cursor: pointer;
+        transition: background-color 0.15s;
+        margin-top: 0.5rem;
+    }
+    .checkout-btn:hover { background-color: #993623; }
+    .checkout-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+    .empty-cart-box {
+        text-align: center;
+        padding: 3rem 1rem;
+        display: none;
+    }
+    .empty-cart-emoji { font-size: 4rem; margin-bottom: 0.75rem; }
+    .empty-cart-text {
+        color: #7a5a5a;
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+    .back-btn {
+        display: inline-block;
+        padding: 0.6rem 1.5rem;
+        border-radius: 9999px;
+        background-color: #b73f2e;
+        color: white;
+        font-weight: 600;
+        text-decoration: none;
+        font-family: 'Fredoka', sans-serif;
+    }
+    .back-btn:hover { background-color: #993623; }
+    #cart-summary { display: none; }
+    #toast-cart {
+        position: fixed;
+        bottom: 1.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #4d9518;
+        color: white;
+        padding: 0.7rem 1.4rem;
+        border-radius: 9999px;
+        font-weight: 600;
+        font-family: 'Fredoka', sans-serif;
+        z-index: 50;
+        display: none;
+        white-space: nowrap;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    }
+</style>
+
+<div class="cart-section">
+    <a href="/" style="display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.85rem; color: #7a5a5a; text-decoration: none; margin-bottom: 1rem;"
+       onmouseover="this.style.color='#b73f2e'" onmouseout="this.style.color='#7a5a5a'">
+        ← Kembali ke Menu
+    </a>
+    <h1 class="cart-title">🛒 Keranjang Belanja</h1>
 
     {{-- Cart Items --}}
-    <div id="cart-container" class="space-y-4 mb-6">
-        {{-- Diisi oleh JavaScript --}}
-    </div>
+    <div id="cart-container"></div>
 
     {{-- Empty Cart --}}
-    <div id="empty-cart" class="hidden text-center py-32">
-        <p class="text-6xl mb-4">🛒</p>
-        <p class="text-gray-500 font-semibold text-lg">Keranjang kamu kosong!</p>
-        <a href="/" class="mt-4 inline-block bg-red-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-red-700 transition">
-            Lihat Menu
-        </a>
+    <div id="empty-cart" class="empty-cart-box">
+        <div class="empty-cart-emoji">🛒</div>
+        <p class="empty-cart-text">Keranjang kamu kosong!</p>
+        <a href="/" class="back-btn">Lihat Menu</a>
     </div>
 
-    {{-- Summary --}}
-    <div id="cart-summary" class="hidden">
-        <div class="bg-white rounded-2xl shadow-md p-4 mb-4">
-            <div class="flex justify-between items-center text-gray-600 mb-2">
+    {{-- Summary + Form --}}
+    <div id="cart-summary">
+        {{-- Ringkasan Harga --}}
+        <div class="cart-card">
+            <div class="summary-row">
                 <span>Subtotal</span>
                 <span id="subtotal">Rp 0</span>
             </div>
-            <div class="flex justify-between items-center text-gray-600 mb-2">
+            <div class="summary-row">
                 <span>Ongkir</span>
-                <span class="text-green-600 font-semibold">Gratis 🎉</span>
+                <span style="color: #4d9518; font-weight: 600;">Gratis 🎉</span>
             </div>
-            <hr class="my-2">
-            <div class="flex justify-between items-center font-bold text-lg text-gray-800">
+            <hr class="summary-divider">
+            <div class="summary-total">
                 <span>Total</span>
-                <span id="total" class="text-red-600">Rp 0</span>
+                <span id="total" style="color: #b73f2e;">Rp 0</span>
             </div>
         </div>
 
-        {{-- Checkout Form --}}
-        <div class="bg-white rounded-2xl shadow-md p-4 mb-4">
-            <h2 class="font-bold text-gray-800 mb-4">📋 Data Pemesan</h2>
-            <div class="space-y-3">
-                <div>
-                    <label class="text-sm text-gray-600 font-medium">Nama Lengkap *</label>
-                    <input type="text" id="customer_name" placeholder="Masukkan nama kamu"
-                        class="w-full mt-1 border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-400">
-                </div>
-                <div>
-                    <label class="text-sm text-gray-600 font-medium">Nomor WhatsApp *</label>
-                    <input type="text" id="customer_phone" placeholder="08xxxxxxxxxx"
-                        class="w-full mt-1 border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-400">
-                </div>
-                <div>
-                    <label class="text-sm text-gray-600 font-medium">Email (opsional)</label>
-                    <input type="email" id="customer_email" placeholder="email@kamu.com"
-                        class="w-full mt-1 border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-400">
-                </div>
-                <div>
-                    <label class="text-sm text-gray-600 font-medium">Alamat Pengiriman *</label>
-                    <textarea id="delivery_address" placeholder="Masukkan alamat lengkap kamu" rows="3"
-                        class="w-full mt-1 border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-400"></textarea>
-                </div>
+        {{-- Data Pemesan --}}
+        <div class="cart-card">
+            <h2 style="font-family:'Fredoka',sans-serif; font-weight:700; color:#400a0f; margin:0 0 1rem; font-size:1.1rem;">
+                📋 Data Pemesan
+            </h2>
+            <div class="form-group">
+                <label class="form-label">Nama Lengkap *</label>
+                <input type="text" id="customer_name" placeholder="Masukkan nama kamu" class="form-input">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Nomor WhatsApp *</label>
+                <input type="text" id="customer_phone" placeholder="08xxxxxxxxxx" class="form-input">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email (opsional)</label>
+                <input type="email" id="customer_email" placeholder="email@kamu.com" class="form-input">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Alamat Pengiriman *</label>
+                <textarea id="delivery_address" placeholder="Masukkan alamat lengkap kamu" rows="3" class="form-input" style="resize: vertical;"></textarea>
             </div>
         </div>
 
-        {{-- Checkout Button --}}
-        <button onclick="checkout()"
-            class="w-full bg-red-600 text-white py-4 rounded-2xl font-bold text-lg hover:bg-red-700 transition active:scale-95">
-            💳 Bayar Sekarang
-        </button>
+        <button onclick="checkout()" class="checkout-btn">💳 Bayar Sekarang</button>
     </div>
-</section>
-
-{{-- Toast --}}
-<div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-green-700 text-white px-6 py-3 rounded-full shadow-lg font-semibold z-50 hidden">
 </div>
+
+<div id="toast-cart"></div>
 
 @endsection
 
@@ -97,37 +267,36 @@
         const summary = document.getElementById('cart-summary');
 
         if (cart.length === 0) {
-            emptyCart.classList.remove('hidden');
-            summary.classList.add('hidden');
+            emptyCart.style.display = 'block';
+            summary.style.display = 'none';
             container.innerHTML = '';
             return;
         }
 
-        emptyCart.classList.add('hidden');
-        summary.classList.remove('hidden');
+        emptyCart.style.display = 'none';
+        summary.style.display = 'block';
 
         container.innerHTML = cart.map((item, index) => `
-            <div class="bg-white rounded-2xl shadow-md p-4 flex items-center gap-4">
-                <div class="text-4xl">🌯</div>
-                <div class="flex-1">
-                    <p class="font-semibold text-gray-800">${item.name}</p>
-                    <p class="text-red-600 font-bold">${formatRupiah(item.price)}</p>
-                    <input type="text" placeholder="Catatan (opsional)"
-                        value="${item.notes}"
-                        onchange="updateNotes(${index}, this.value)"
-                        class="mt-1 w-full text-sm border border-gray-200 rounded-lg px-3 py-1 focus:outline-none focus:ring-1 focus:ring-red-400">
-                </div>
-                <div class="flex items-center gap-2">
-                    <button onclick="changeQty(${index}, -1)"
-                        class="w-8 h-8 bg-gray-100 rounded-full font-bold text-gray-600 hover:bg-red-100 transition">-</button>
-                    <span class="font-bold text-gray-800 w-4 text-center">${item.qty}</span>
-                    <button onclick="changeQty(${index}, 1)"
-                        class="w-8 h-8 bg-gray-100 rounded-full font-bold text-gray-600 hover:bg-green-100 transition">+</button>
+            <div class="cart-card">
+                <div class="cart-item">
+                    <div style="font-size:2.2rem; flex-shrink:0;">🌯</div>
+                    <div class="cart-item-info">
+                        <p class="cart-item-name">${item.name}</p>
+                        <p class="cart-item-price">${formatRupiah(item.price)}</p>
+                        <input type="text" placeholder="Catatan (opsional)"
+                            value="${item.notes || ''}"
+                            onchange="updateNotes(${index}, this.value)"
+                            class="cart-note-input">
+                    </div>
+                    <div class="qty-controls">
+                        <button class="qty-btn" onclick="changeQty(${index}, -1)">−</button>
+                        <span class="qty-num">${item.qty}</span>
+                        <button class="qty-btn" onclick="changeQty(${index}, 1)">+</button>
+                    </div>
                 </div>
             </div>
         `).join('');
 
-        // Update total
         const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
         document.getElementById('subtotal').textContent = formatRupiah(total);
         document.getElementById('total').textContent = formatRupiah(total);
@@ -135,9 +304,7 @@
 
     function changeQty(index, delta) {
         cart[index].qty += delta;
-        if (cart[index].qty <= 0) {
-            cart.splice(index, 1);
-        }
+        if (cart[index].qty <= 0) cart.splice(index, 1);
         localStorage.setItem('biterito_cart', JSON.stringify(cart));
         updateCartCount();
         renderCart();
@@ -149,10 +316,10 @@
     }
 
     function showToast(message) {
-        const toast = document.getElementById('toast');
+        const toast = document.getElementById('toast-cart');
         toast.textContent = message;
-        toast.classList.remove('hidden');
-        setTimeout(() => toast.classList.add('hidden'), 2500);
+        toast.style.display = 'block';
+        setTimeout(() => toast.style.display = 'none', 2500);
     }
 
     async function checkout() {
@@ -165,13 +332,12 @@
             showToast('⚠️ Nama, WhatsApp, dan alamat wajib diisi!');
             return;
         }
-
         if (cart.length === 0) {
             showToast('⚠️ Keranjang kamu kosong!');
             return;
         }
 
-        const btn = document.querySelector('button[onclick="checkout()"]');
+        const btn = document.querySelector('.checkout-btn');
         btn.textContent = '⏳ Memproses...';
         btn.disabled = true;
 

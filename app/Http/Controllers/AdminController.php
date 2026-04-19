@@ -34,21 +34,28 @@ class AdminController extends Controller
         $query = Order::orderBy('created_at', 'desc');
 
         if ($request->status) {
-            if ($request->status === 'pending') {
-                $query->where('payment_status', 'pending');
+            $paymentStatuses = ['pending', 'paid', 'failed'];
+            if (in_array($request->status, $paymentStatuses)) {
+                $query->where('payment_status', $request->status);
             } else {
-                $query->where('payment_status', $request->status)
-                      ->orWhere('order_status', $request->status);
+                $query->where('order_status', $request->status);
             }
         }
 
-        $orders = $query->get();
-        $totalOrders = Order::count();
-        $paidOrders = Order::where('payment_status', 'paid')->count();
-        $pendingOrders = Order::where('payment_status', 'pending')->count();
-        $totalRevenue = Order::where('payment_status', 'paid')->sum('total_amount');
+        $orders = $query->paginate(10)->appends(request()->query());
+        $totalOrders    = Order::count();
+        $paidOrders     = Order::where('payment_status', 'paid')->count();
+        $pendingOrders  = Order::where('payment_status', 'pending')->count();
+        $totalRevenue   = Order::where('payment_status', 'paid')->sum('total_amount');
+        $waitingOrders  = Order::where('order_status', 'waiting')->count();
+        $processOrders  = Order::where('order_status', 'process')->count();
+        $readyOrders    = Order::where('order_status', 'ready')->count();
+        $deliveredOrders = Order::where('order_status', 'delivered')->count();
 
-        return view('admin.dashboard', compact('orders', 'totalOrders', 'paidOrders', 'pendingOrders', 'totalRevenue'));
+        return view('admin.dashboard', compact(
+            'orders', 'totalOrders', 'paidOrders', 'pendingOrders', 'totalRevenue',
+            'waitingOrders', 'processOrders', 'readyOrders', 'deliveredOrders'
+        ));
     }
 
     public function orderDetail($id)
@@ -70,8 +77,8 @@ class AdminController extends Controller
         
         $order = Order::findOrFail($id);
         $order->update(['order_status' => $request->order_status]);
-        
-        return redirect('/admin/dashboard')->with('success', 'Status order berhasil diupdate!');
+
+        return redirect()->back()->with('success', 'Status order berhasil diupdate!');
     }
 }
 

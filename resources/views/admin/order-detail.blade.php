@@ -85,22 +85,6 @@
         </div>
     </div>
 
-    {{-- Update Status --}}
-    <div class="bg-white rounded-2xl shadow p-6">
-        <h3 class="font-bold text-gray-700 mb-4">🔄 Update Status Order</h3>
-        <form method="POST" action="/admin/order/{{ $order->id }}/status">
-            @csrf
-            <select name="order_status" class="w-full border border-gray-300 rounded-xl px-4 py-3 mb-4 focus:outline-none focus:ring-2 focus:ring-red-400">
-                <option value="waiting" {{ $order->order_status == 'waiting' ? 'selected' : '' }}>⏳ Waiting</option>
-                <option value="process" {{ $order->order_status == 'process' ? 'selected' : '' }}>🔧 Process</option>
-                <option value="ready" {{ $order->order_status == 'ready' ? 'selected' : '' }}>✅ Ready</option>
-                <option value="delivered" {{ $order->order_status == 'delivered' ? 'selected' : '' }}>🚚 Delivered</option>
-            </select>
-            <button type="submit" class="w-full bg-gray-900 text-white py-3 rounded-xl font-semibold hover:bg-gray-700 transition">
-                Update Status
-            </button>
-        </form>
-    </div>
 
 </div>
 

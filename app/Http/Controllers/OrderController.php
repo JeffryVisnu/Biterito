@@ -129,7 +129,7 @@ class OrderController extends Controller
         if (!$order) return response()->json(['message' => 'Order not found'], 404);
 
         if (in_array($request->transaction_status, ['settlement', 'capture'])) {
-            $order->update(['payment_status' => 'paid', 'order_status' => 'process']);
+            $order->update(['payment_status' => 'paid', 'order_status' => 'waiting']);
         } elseif (in_array($request->transaction_status, ['cancel', 'deny', 'expire'])) {
             $order->update(['payment_status' => 'failed']);
         }

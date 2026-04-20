@@ -121,7 +121,7 @@
             {{-- Logo --}}
             <a href="/" style="text-decoration: none; display: inline-flex; align-items: center;">
                 <div id="navbar-logo-box">
-                    <img id="navbar-logo-img" src="{{ asset('logoasli.PNG') }}" alt="Biterito"
+                    <img id="navbar-logo-img" src="{{ asset('Logo_transparan.png') }}" alt="Biterito"
                         onerror="this.style.display='none'; document.getElementById('logo-text').style.display='inline-block'">
                     <span id="logo-text">Biterito</span>
                 </div>

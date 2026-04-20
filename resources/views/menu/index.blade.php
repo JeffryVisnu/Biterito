@@ -35,7 +35,7 @@
         {{-- Logo --}}
         <div style="display: flex; justify-content: center; margin-bottom: 0.75rem;">
             <div style="background-color: #e4dec4; border-radius: 18px; padding: 8px 20px; display: inline-flex; align-items: center;">
-                <img src="{{ asset('logoasli.PNG') }}" alt="Biterito"
+                <img src="{{ asset('Logo_transparan.png') }}" alt="Biterito"
                      style="height: 5.5rem; width: auto; object-fit: contain;"
                      onerror="this.style.display='none'; document.getElementById('hero-logo-text').style.display='block'">
                 <span id="hero-logo-text" style="display:none; font-family:'Fredoka',sans-serif; font-size:1.75rem; font-weight:700; color:#b73f2e;">Biterito</span>
@@ -94,7 +94,10 @@
             </div>
             <div style="padding: 1rem; display: flex; flex-direction: column; flex: 1;">
                 <h3 style="font-weight: 700; font-size: 1.05rem; color: #400a0f; font-family: 'Fredoka', sans-serif; margin: 0 0 0.2rem;">{{ $product->name }}</h3>
-                <p style="font-size: 0.85rem; color: #7a5a5a; margin: 0; flex: 1;">{{ $product->description }}</p>
+                <div style="flex: 1;">
+                    <p id="desc-makanan-{{ $product->id }}" style="font-size: 0.85rem; color: #7a5a5a; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{{ $product->description }}</p>
+                    <button onclick="toggleDesc('desc-makanan-{{ $product->id }}', this)" style="background: none; border: none; color: #b73f2e; font-size: 0.78rem; font-weight: 600; cursor: pointer; padding: 0.15rem 0 0; font-family: 'Fredoka', sans-serif;">Baca selengkapnya</button>
+                </div>
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid #f0ebe0;">
                     <span style="font-weight: 800; font-size: 1.15rem; color: #b73f2e;">
                         Rp {{ number_format($product->price, 0, ',', '.') }}
@@ -126,7 +129,10 @@
             </div>
             <div style="padding: 1rem; display: flex; flex-direction: column; flex: 1;">
                 <h3 style="font-weight: 700; font-size: 1.05rem; color: #400a0f; font-family: 'Fredoka', sans-serif; margin: 0 0 0.2rem;">{{ $product->name }}</h3>
-                <p style="font-size: 0.85rem; color: #7a5a5a; margin: 0; flex: 1;">{{ $product->description }}</p>
+                <div style="flex: 1;">
+                    <p id="desc-minuman-{{ $product->id }}" style="font-size: 0.85rem; color: #7a5a5a; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{{ $product->description }}</p>
+                    <button onclick="toggleDesc('desc-minuman-{{ $product->id }}', this)" style="background: none; border: none; color: #db5c26; font-size: 0.78rem; font-weight: 600; cursor: pointer; padding: 0.15rem 0 0; font-family: 'Fredoka', sans-serif;">Baca selengkapnya</button>
+                </div>
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid #f0ebe0;">
                     <span style="font-weight: 800; font-size: 1.15rem; color: #db5c26;">
                         Rp {{ number_format($product->price, 0, ',', '.') }}
@@ -169,6 +175,24 @@
         localStorage.setItem('biterito_cart', JSON.stringify(cart));
         updateCartCount();
         showToast('✅ ' + name + ' ditambahkan!');
+    }
+
+    function toggleDesc(id, btn) {
+        const p = document.getElementById(id);
+        const isCollapsed = p.style.webkitLineClamp !== 'unset' && p.style.webkitLineClamp !== '';
+        if (isCollapsed || p.style.webkitLineClamp === '') {
+            p.style.webkitLineClamp = 'unset';
+            p.style.webkitBoxOrient = 'unset';
+            p.style.display = 'block';
+            p.style.overflow = 'visible';
+            btn.textContent = 'Sembunyikan';
+        } else {
+            p.style.display = '-webkit-box';
+            p.style.webkitLineClamp = '2';
+            p.style.webkitBoxOrient = 'vertical';
+            p.style.overflow = 'hidden';
+            btn.textContent = 'Baca selengkapnya';
+        }
     }
 
     function showToast(message) {

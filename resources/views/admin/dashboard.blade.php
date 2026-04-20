@@ -189,7 +189,10 @@
         <span>🌯</span>
         <span>Biterito Admin</span>
     </a>
-    <a href="/admin/logout" class="admin-nav-logout">Logout →</a>
+    <form method="POST" action="/admin/logout" style="display:inline;">
+        @csrf
+        <button type="submit" class="admin-nav-logout" style="background:none;border:none;cursor:pointer;">Logout →</button>
+    </form>
 </nav>
 
 <div class="admin-container">

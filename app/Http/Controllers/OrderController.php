@@ -21,12 +21,13 @@ class OrderController extends Controller
 
     public function checkout(Request $request)
     {
-        // Validasi input
         $request->validate([
-            'customer_name' => 'required|string',
-            'customer_phone' => 'required|string',
-            'delivery_address' => 'required|string',
-            'items' => 'required|array|min:1',
+            'customer_name'    => 'required|string|max:255',
+            'customer_phone'   => 'required|string|max:20',
+            'delivery_address' => 'required|string|max:500',
+            'items'            => 'required|array|min:1',
+            'items.*.id'       => 'required|integer|exists:products,id',
+            'items.*.qty'      => 'required|integer|min:1|max:99',
         ]);
 
         // Hitung total
@@ -113,17 +114,17 @@ class OrderController extends Controller
 
     public function webhook(Request $request)
     {
-        // $serverKey = config('midtrans.server_key');
-        // $hashed = hash('sha512',
-        //     $request->order_id .
-        //     $request->status_code .
-        //     $request->gross_amount .
-        //     $serverKey
-        // );
+        $serverKey = config('midtrans.server_key');
+        $hashed = hash('sha512',
+            $request->order_id .
+            $request->status_code .
+            $request->gross_amount .
+            $serverKey
+        );
 
-        // if ($hashed !== $request->signature_key) {
-        //     return response()->json(['message' => 'Invalid signature'], 403);
-        // }
+        if ($hashed !== $request->signature_key) {
+            return response()->json(['message' => 'Invalid signature'], 403);
+        }
 
         $order = Order::where('order_code', $request->order_id)->first();
         if (!$order) return response()->json(['message' => 'Order not found'], 404);

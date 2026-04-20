@@ -15,7 +15,10 @@
         <span class="text-2xl">🌯</span>
         <span class="font-bold text-lg">Biterito Admin</span>
     </a>
-    <a href="/admin/logout" class="text-gray-400 hover:text-white text-sm transition">Logout →</a>
+    <form method="POST" action="/admin/logout" style="display:inline;">
+        @csrf
+        <button type="submit" class="text-gray-400 hover:text-white text-sm transition" style="background:none;border:none;cursor:pointer;">Logout →</button>
+    </form>
 </nav>
 
 <div class="max-w-2xl mx-auto px-4 py-8">

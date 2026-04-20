@@ -14,8 +14,8 @@ Route::post('/webhook/midtrans', [OrderController::class, 'webhook']);
 use App\Http\Controllers\AdminController;
 
 Route::get('/admin/login', [AdminController::class, 'loginPage']);
-Route::post('/admin/login', [AdminController::class, 'login']);
+Route::post('/admin/login', [AdminController::class, 'login'])->middleware('throttle:5,1');
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard']);
 Route::get('/admin/order/{id}', [AdminController::class, 'orderDetail']);
-Route::get('/admin/logout', [AdminController::class, 'logout']);
+Route::post('/admin/logout', [AdminController::class, 'logout']);
 Route::post('/admin/order/{id}/status', [AdminController::class, 'updateStatus']);

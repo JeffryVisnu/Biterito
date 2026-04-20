@@ -52,7 +52,7 @@
 
         {{-- Badges --}}
         <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.25rem;">
-            <span style="color: white; padding: 0.35rem 0.9rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 600; background-color: #f69304; display: inline-block;">
+            <span style="color: white; padding: 0.35rem 0.9rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 600; background-color: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); display: inline-block;">
                 💰 Harga Terjangkau
             </span>
             <span style="color: white; padding: 0.35rem 0.9rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 600; background-color: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); display: inline-block;">

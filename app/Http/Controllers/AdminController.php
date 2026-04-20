@@ -17,12 +17,18 @@ class AdminController extends Controller
 
     public function login(Request $request)
     {
+        $request->validate([
+            'email'    => 'required|email',
+            'password' => 'required|string',
+        ]);
+
         $admin = DB::table('admins')->where('email', $request->email)->first();
 
         if (!$admin || !Hash::check($request->password, $admin->password)) {
             return back()->with('error', 'Email atau password salah!');
         }
 
+        session()->regenerate();
         session(['admin' => $admin->id, 'admin_name' => $admin->name]);
         return redirect('/admin/dashboard');
     }
@@ -74,7 +80,11 @@ class AdminController extends Controller
     public function updateStatus(Request $request, $id)
     {
         if (!session('admin')) return redirect('/admin/login');
-        
+
+        $request->validate([
+            'order_status' => 'required|in:waiting,process,ready,delivered',
+        ]);
+
         $order = Order::findOrFail($id);
         $order->update(['order_status' => $request->order_status]);
 

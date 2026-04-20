@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
+        html { scroll-behavior: smooth; }
         * { box-sizing: border-box; }
         body {
             font-family: 'Fredoka', sans-serif;
@@ -119,13 +120,21 @@
     <nav id="navbar">
         <div id="navbar-inner">
             {{-- Logo --}}
-            <a href="/" style="text-decoration: none; display: inline-flex; align-items: center;">
-                <div id="navbar-logo-box">
-                    <img id="navbar-logo-img" src="{{ asset('Logo_transparan.png') }}" alt="Biterito"
-                        onerror="this.style.display='none'; document.getElementById('logo-text').style.display='inline-block'">
-                    <span id="logo-text">Biterito</span>
-                </div>
-            </a>
+            <div style="display: flex; align-items: center; gap: 1.5rem;">
+                <a href="/" style="text-decoration: none; display: inline-flex; align-items: center;">
+                    <div id="navbar-logo-box">
+                        <img id="navbar-logo-img" src="{{ asset('Logo_transparan.png') }}" alt="Biterito"
+                            onerror="this.style.display='none'; document.getElementById('logo-text').style.display='inline-block'">
+                        <span id="logo-text">Biterito</span>
+                    </div>
+                </a>
+                <a href="/#menu-section" style="color: white; text-decoration: none; font-weight: 600; font-size: 0.95rem;"
+                   onmouseover="this.style.color='#f69304'" onmouseout="this.style.color='white'">Menu</a>
+                <a href="#tentang" style="color: white; text-decoration: none; font-weight: 600; font-size: 0.95rem;"
+                   onmouseover="this.style.color='#f69304'" onmouseout="this.style.color='white'">Tentang</a>
+                <a href="#site-footer" style="color: white; text-decoration: none; font-weight: 600; font-size: 0.95rem;"
+                   onmouseover="this.style.color='#f69304'" onmouseout="this.style.color='white'">Kontak</a>
+            </div>
 
             {{-- Cart Button --}}
             <a href="/cart" id="cart-btn"

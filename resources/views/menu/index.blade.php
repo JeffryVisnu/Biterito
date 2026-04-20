@@ -34,9 +34,9 @@
 
         {{-- Logo --}}
         <div style="display: flex; justify-content: center; margin-bottom: 0.75rem;">
-            <div style="background-color: #e4dec4; border-radius: 18px; padding: 8px 20px; display: inline-flex; align-items: center;">
+            <div style="background-color: #e4dec4; border-radius: 18px; padding: 0; display: inline-flex; align-items: center; overflow: hidden; height: 9rem;">
                 <img src="{{ asset('Logo_transparan.png') }}" alt="Biterito"
-                     style="height: 5.5rem; width: auto; object-fit: contain;"
+                     style="height: 13rem; width: auto; object-fit: cover; object-position: center; margin-top: 1rem;"
                      onerror="this.style.display='none'; document.getElementById('hero-logo-text').style.display='block'">
                 <span id="hero-logo-text" style="display:none; font-family:'Fredoka',sans-serif; font-size:1.75rem; font-weight:700; color:#b73f2e;">Biterito</span>
             </div>

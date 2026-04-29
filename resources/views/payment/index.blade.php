@@ -192,7 +192,7 @@
             clearInterval(checkInterval);
             window.location.reload();
         }
-    }, 5000);
+    }, 1000);
     @endif
 </script>
 @endpush

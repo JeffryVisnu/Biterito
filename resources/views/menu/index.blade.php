@@ -149,7 +149,7 @@
                     <span style="font-weight: 800; font-size: 1.15rem; color: #b73f2e;">
                         Rp {{ number_format($product->price, 0, ',', '.') }}
                     </span>
-                    <button onclick="addToCart({{ $product->id }}, '{{ $product->name }}', {{ $product->price }})"
+                    <button onclick="addToCart({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price }}, '{{ $product->image ? asset('images/products/'.$product->image) : '' }}')"
                         style="background-color: #b73f2e; color: white; padding: 0.45rem 1rem; border-radius: 9999px; font-weight: 600; font-family: 'Fredoka', sans-serif; border: none; cursor: pointer; font-size: 0.9rem; transition: background-color 0.15s;"
                         onmouseover="this.style.backgroundColor='#993623'" onmouseout="this.style.backgroundColor='#b73f2e'">
                         + Tambah
@@ -184,7 +184,7 @@
                     <span style="font-weight: 800; font-size: 1.15rem; color: #db5c26;">
                         Rp {{ number_format($product->price, 0, ',', '.') }}
                     </span>
-                    <button onclick="addToCart({{ $product->id }}, '{{ $product->name }}', {{ $product->price }})"
+                    <button onclick="addToCart({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price }}, '{{ $product->image ? asset('images/products/'.$product->image) : '' }}')"
                         style="background-color: #db5c26; color: white; padding: 0.45rem 1rem; border-radius: 9999px; font-weight: 600; font-family: 'Fredoka', sans-serif; border: none; cursor: pointer; font-size: 0.9rem; transition: background-color 0.15s;"
                         onmouseover="this.style.backgroundColor='#b5402c'" onmouseout="this.style.backgroundColor='#db5c26'">
                         + Tambah
@@ -212,12 +212,12 @@
         document.getElementById('cart-count').textContent = total;
     }
 
-    function addToCart(id, name, price) {
+    function addToCart(id, name, price, image) {
         const existing = cart.find(item => item.id === id);
         if (existing) {
             existing.qty += 1;
         } else {
-            cart.push({ id, name, price, qty: 1, notes: '' });
+            cart.push({ id, name, price, image: image || '', qty: 1, notes: '' });
         }
         localStorage.setItem('biterito_cart', JSON.stringify(cart));
         updateCartCount();

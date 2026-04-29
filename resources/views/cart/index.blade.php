@@ -279,7 +279,12 @@
         container.innerHTML = cart.map((item, index) => `
             <div class="cart-card">
                 <div class="cart-item">
-                    <div style="font-size:2.2rem; flex-shrink:0;">🌯</div>
+                    <div style="width:3.5rem; height:3.5rem; border-radius:0.6rem; overflow:hidden; flex-shrink:0; background:linear-gradient(135deg,#f4a738 0%,#b73f2e 100%); display:flex; align-items:center; justify-content:center;">
+                        ${item.image
+                            ? `<img src="${item.image}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<span style=\\'font-size:1.8rem;\\'>🌯</span>'">`
+                            : `<span style="font-size:1.8rem;">🌯</span>`
+                        }
+                    </div>
                     <div class="cart-item-info">
                         <p class="cart-item-name">${item.name}</p>
                         <p class="cart-item-price">${formatRupiah(item.price)}</p>

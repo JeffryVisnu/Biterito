@@ -72,7 +72,7 @@
                 Tentang Biterito
             </h2>
             <p style="font-size: 0.9rem; color: #5c3a2e; max-width: 36rem; margin: 0 auto; line-height: 1.65;">
-                Inovasi kuliner yang memadukan <strong>konsep burrito Meksiko</strong> dengan <strong>bumbu legendaris Nusantara</strong> — sensasi nasi rames &amp; nasi Padang dalam satu genggaman, hanya Rp&nbsp;17.000.
+                Inovasi kuliner yang memadukan <strong>konsep burrito Meksiko</strong> dengan <strong>bumbu legendaris Nusantara</strong>, hanya Rp&nbsp;19.000.
             </p>
         </div>
 

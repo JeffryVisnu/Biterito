@@ -16,8 +16,7 @@ class Order extends Model
         'total_amount',
         'payment_status',
         'order_status',
-        'midtrans_snap_token',
-        'midtrans_order_id',
+        'payment_proof',
         'scheduled_pickup'
     ];
 

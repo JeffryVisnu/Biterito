@@ -78,14 +78,13 @@
             border: 1.5px solid transparent;
             transition: all 0.15s;
         }
-        .filter-tab.active-all       { background: #dc2626; color: white; }
-        .filter-tab.active-pending   { background: #f59e0b; color: white; }
-        .filter-tab.active-paid      { background: #16a34a; color: white; }
-        .filter-tab.active-waiting   { background: #d97706; color: white; }
-        .filter-tab.active-process   { background: #2563eb; color: white; }
-        .filter-tab.active-ready     { background: #7c3aed; color: white; }
-        .filter-tab.active-delivered { background: #374151; color: white; }
-        .filter-tab.active-failed    { background: #dc2626; color: white; }
+        .filter-tab.active-all         { background: #dc2626; color: white; }
+        .filter-tab.active-unchecked   { background: #f59e0b; color: white; }
+        .filter-tab.active-paid        { background: #16a34a; color: white; }
+        .filter-tab.active-waiting     { background: #d97706; color: white; }
+        .filter-tab.active-process     { background: #2563eb; color: white; }
+        .filter-tab.active-ready       { background: #7c3aed; color: white; }
+        .filter-tab.active-delivered   { background: #374151; color: white; }
         .filter-tab.inactive { background: #f3f4f6; color: #6b7280; border-color: #e5e7eb; }
         .filter-tab.inactive:hover { background: #e5e7eb; }
 
@@ -97,9 +96,8 @@
             font-size: 0.7rem;
             font-weight: 600;
         }
-        .badge-pending   { background: #fef3c7; color: #92400e; }
+        .badge-unchecked { background: #fef3c7; color: #92400e; }
         .badge-paid      { background: #dcfce7; color: #15803d; }
-        .badge-failed    { background: #fee2e2; color: #991b1b; }
         .badge-waiting   { background: #fef9c3; color: #854d0e; }
         .badge-process   { background: #dbeafe; color: #1d4ed8; }
         .badge-ready     { background: #ede9fe; color: #6d28d9; }
@@ -118,6 +116,8 @@
             outline: none;
         }
         .status-select:focus { border-color: #6366f1; }
+        .status-select-pay-unchecked { border-color: #fbbf24; color: #92400e; background: #fffbeb; }
+        .status-select-pay-paid      { border-color: #86efac; color: #15803d; background: #f0fdf4; }
 
         /* Table */
         .orders-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
@@ -212,8 +212,8 @@
             <p class="stat-label">Paid</p>
         </div>
         <div class="stat-card">
-            <p class="stat-number" style="color: #f59e0b;">{{ $pendingOrders }}</p>
-            <p class="stat-label">Pending</p>
+            <p class="stat-number" style="color: #f59e0b;">{{ $uncheckedOrders }}</p>
+            <p class="stat-label">Unchecked</p>
         </div>
         <div class="stat-card" style="grid-column: span 1;">
             <p class="stat-label" style="margin: 0 0 0.2rem;">Total Revenue</p>
@@ -249,12 +249,10 @@
         <div class="filter-bar">
             <a href="/admin/dashboard"
                class="filter-tab {{ !request('status') ? 'active-all' : 'inactive' }}">Semua</a>
-            <a href="/admin/dashboard?status=pending"
-               class="filter-tab {{ request('status') == 'pending' ? 'active-pending' : 'inactive' }}">Pending</a>
+            <a href="/admin/dashboard?status=unchecked"
+               class="filter-tab {{ request('status') == 'unchecked' ? 'active-unchecked' : 'inactive' }}">Unchecked</a>
             <a href="/admin/dashboard?status=paid"
                class="filter-tab {{ request('status') == 'paid' ? 'active-paid' : 'inactive' }}">Paid</a>
-            <a href="/admin/dashboard?status=failed"
-               class="filter-tab {{ request('status') == 'failed' ? 'active-failed' : 'inactive' }}">❌ Failed</a>
             <a href="/admin/dashboard?status=waiting"
                class="filter-tab {{ request('status') == 'waiting' ? 'active-waiting' : 'inactive' }}">⏳ Waiting</a>
             <a href="/admin/dashboard?status=process"
@@ -290,12 +288,15 @@
                             </td>
                             <td style="font-weight: 600;">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</td>
                             <td>
-                                <span class="badge badge-{{ $order->payment_status }}">
-                                    {{ ucfirst($order->payment_status) }}
-                                </span>
+                                <form method="POST" action="/admin/order/{{ $order->id }}/payment-status">
+                                    @csrf
+                                    <select name="payment_status" class="status-select status-select-pay-{{ $order->payment_status }}" onchange="this.form.submit()">
+                                        <option value="unchecked" {{ $order->payment_status == 'unchecked' ? 'selected' : '' }}>Unchecked</option>
+                                        <option value="paid"      {{ $order->payment_status == 'paid'      ? 'selected' : '' }}>✅ Paid</option>
+                                    </select>
+                                </form>
                             </td>
                             <td>
-                                {{-- Inline status update --}}
                                 <form method="POST" action="/admin/order/{{ $order->id }}/status">
                                     @csrf
                                     <select name="order_status" class="status-select" onchange="this.form.submit()">
@@ -337,13 +338,18 @@
             <div class="mobile-order-card">
                 <div class="mobile-order-card-header">
                     <span class="order-code">{{ $order->order_code }}</span>
-                    <span class="badge badge-{{ $order->payment_status }}">{{ ucfirst($order->payment_status) }}</span>
+                    <form method="POST" action="/admin/order/{{ $order->id }}/payment-status" style="margin:0;">
+                        @csrf
+                        <select name="payment_status" class="status-select status-select-pay-{{ $order->payment_status }}" onchange="this.form.submit()">
+                            <option value="unchecked" {{ $order->payment_status == 'unchecked' ? 'selected' : '' }}>Unchecked</option>
+                            <option value="paid"      {{ $order->payment_status == 'paid'      ? 'selected' : '' }}>✅ Paid</option>
+                        </select>
+                    </form>
                 </div>
                 <p class="customer-name">{{ $order->customer_name }}</p>
                 <p class="customer-phone">{{ $order->customer_phone }}</p>
                 <p style="font-size: 0.75rem; color: #9ca3af; margin: 0.25rem 0 0;">{{ $order->created_at->format('d M Y, H:i') }}</p>
 
-                {{-- Inline status mobile --}}
                 <form method="POST" action="/admin/order/{{ $order->id }}/status" style="margin-top: 0.6rem;">
                     @csrf
                     <select name="order_status" class="status-select" onchange="this.form.submit()" style="width: 100%;">

@@ -67,6 +67,12 @@ class OrderController extends Controller
         return view('payment.index', compact('order'));
     }
 
+    public function proofSent($orderCode)
+    {
+        $order = Order::where('order_code', $orderCode)->firstOrFail();
+        return view('payment.proof-sent', compact('order'));
+    }
+
     public function uploadProof(Request $request, $orderCode)
     {
         $request->validate([
@@ -78,7 +84,6 @@ class OrderController extends Controller
         $path = $request->file('proof')->store('payment-proofs', 'public');
         $order->update(['payment_proof' => $path]);
 
-        return redirect()->route('payment', $orderCode)
-            ->with('success', 'Bukti pembayaran berhasil dikirim! Kami akan segera memverifikasi.');
+        return redirect()->route('payment.proof-sent', $orderCode);
     }
 }

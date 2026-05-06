@@ -11,6 +11,7 @@ Route::get('/cart', [CartController::class, 'index']);
 Route::post('/checkout', [OrderController::class, 'checkout']);
 Route::get('/payment/{orderCode}', [OrderController::class, 'payment'])->name('payment');
 Route::post('/payment/{orderCode}/upload-proof', [OrderController::class, 'uploadProof'])->name('payment.upload-proof');
+Route::get('/payment/{orderCode}/terima-kasih', [OrderController::class, 'proofSent'])->name('payment.proof-sent');
 
 Route::get('/admin/login', [AdminController::class, 'loginPage']);
 Route::post('/admin/login', [AdminController::class, 'login'])->middleware('throttle:5,1');

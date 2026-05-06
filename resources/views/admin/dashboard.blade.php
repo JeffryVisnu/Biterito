@@ -172,6 +172,19 @@
             font-size: 0.875rem;
         }
 
+        /* Delete button */
+        .btn-delete {
+            background: none;
+            border: none;
+            color: #ef4444;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+        .btn-delete:hover { text-decoration: underline; }
+
         /* Desktop/mobile visibility */
         .desktop-only { display: none; }
         .mobile-only { display: block; }
@@ -309,7 +322,14 @@
                             </td>
                             <td style="color: #9ca3af; font-size: 0.75rem;">{{ $order->created_at->format('d M, H:i') }}</td>
                             <td>
-                                <a href="/admin/order/{{ $order->id }}" class="detail-link">Detail</a>
+                                <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+                                    <a href="/admin/order/{{ $order->id }}" class="detail-link">Detail</a>
+                                    <form method="POST" action="/admin/order/{{ $order->id }}" onsubmit="return confirm('Hapus order {{ $order->order_code }}? Tindakan ini tidak bisa dibatalkan.');" style="margin:0;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn-delete">Hapus</button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         @empty
@@ -362,7 +382,14 @@
 
                 <div class="mobile-order-footer">
                     <span class="mobile-price">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</span>
-                    <a href="/admin/order/{{ $order->id }}" class="detail-link">Detail →</a>
+                    <div style="display: flex; gap: 0.75rem; align-items: center;">
+                        <a href="/admin/order/{{ $order->id }}" class="detail-link">Detail →</a>
+                        <form method="POST" action="/admin/order/{{ $order->id }}" onsubmit="return confirm('Hapus order {{ $order->order_code }}? Tindakan ini tidak bisa dibatalkan.');" style="margin:0;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn-delete">Hapus</button>
+                        </form>
+                    </div>
                 </div>
             </div>
             @empty

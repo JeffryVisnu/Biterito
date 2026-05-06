@@ -21,52 +21,47 @@ class OrderController extends Controller
             'items.*.qty'      => 'required|integer|min:1|max:99',
         ]);
 
+        $items = [];
         $total = 0;
 
         foreach ($request->items as $item) {
             $product = Product::find($item['id']);
             if (!$product) continue;
             $total += $product->price * $item['qty'];
+            $items[] = [
+                'product_id'   => $product->id,
+                'product_name' => $product->name,
+                'quantity'     => $item['qty'],
+                'price'        => $product->price,
+                'notes'        => $item['notes'] ?? '',
+            ];
         }
 
-        $orderCode = 'BITERITO-' . strtoupper(uniqid());
-
-        $order = Order::create([
-            'order_code'       => $orderCode,
-            'customer_name'    => $request->customer_name,
-            'customer_phone'   => $request->customer_phone,
-            'customer_email'   => '',
-            'delivery_address' => $request->delivery_address,
-            'order_type'       => 'preorder',
-            'total_amount'     => $total,
-            'payment_status'   => 'unchecked',
-            'order_status'     => 'waiting',
-            'delivery_session' => $request->delivery_session,
+        session([
+            'pending_order' => [
+                'customer_name'    => $request->customer_name,
+                'customer_phone'   => $request->customer_phone,
+                'delivery_address' => $request->delivery_address,
+                'delivery_session' => $request->delivery_session,
+                'items'            => $items,
+                'total'            => $total,
+            ]
         ]);
 
-        foreach ($request->items as $item) {
-            $product = Product::find($item['id']);
-            if (!$product) continue;
+        return response()->json(['success' => true]);
+    }
 
-            OrderItem::create([
-                'order_id'   => $order->id,
-                'product_id' => $product->id,
-                'quantity'   => $item['qty'],
-                'price'      => $product->price,
-                'notes'      => $item['notes'] ?? '',
-            ]);
-        }
-
-        return response()->json([
-            'success'    => true,
-            'order_code' => $orderCode,
-        ]);
+    public function pendingPayment()
+    {
+        $pending = session('pending_order');
+        if (!$pending) return redirect('/');
+        return view('payment.index', ['pending' => $pending, 'order' => null]);
     }
 
     public function payment($orderCode)
     {
         $order = Order::where('order_code', $orderCode)->firstOrFail();
-        return view('payment.index', compact('order'));
+        return view('payment.index', ['order' => $order, 'pending' => null]);
     }
 
     public function proofSent($orderCode)
@@ -75,16 +70,44 @@ class OrderController extends Controller
         return view('payment.proof-sent', compact('order'));
     }
 
-    public function uploadProof(Request $request, $orderCode)
+    public function uploadProof(Request $request)
     {
         $request->validate([
             'proof' => 'required|file|mimes:jpg,jpeg,png,pdf|max:1024',
         ]);
 
-        $order = Order::where('order_code', $orderCode)->firstOrFail();
+        $pending = session('pending_order');
+        if (!$pending) return redirect('/');
+
+        $orderCode = 'BITERITO-' . strtoupper(uniqid());
+
+        $order = Order::create([
+            'order_code'       => $orderCode,
+            'customer_name'    => $pending['customer_name'],
+            'customer_phone'   => $pending['customer_phone'],
+            'customer_email'   => '',
+            'delivery_address' => $pending['delivery_address'],
+            'order_type'       => 'preorder',
+            'total_amount'     => $pending['total'],
+            'payment_status'   => 'unchecked',
+            'order_status'     => 'waiting',
+            'delivery_session' => $pending['delivery_session'],
+        ]);
+
+        foreach ($pending['items'] as $item) {
+            OrderItem::create([
+                'order_id'   => $order->id,
+                'product_id' => $item['product_id'],
+                'quantity'   => $item['quantity'],
+                'price'      => $item['price'],
+                'notes'      => $item['notes'],
+            ]);
+        }
 
         $path = $request->file('proof')->store('payment-proofs', 'public');
         $order->update(['payment_proof' => $path]);
+
+        session()->forget('pending_order');
 
         return redirect()->route('payment.proof-sent', $orderCode);
     }

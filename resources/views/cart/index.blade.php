@@ -269,6 +269,9 @@
             <div class="form-group">
                 <label class="form-label">Alamat Pengiriman *</label>
                 <textarea id="delivery_address" placeholder="Masukkan alamat lengkap kamu" rows="3" class="form-input" style="resize: vertical;"></textarea>
+                <div style="margin-top:0.5rem; background:#f0fdf4; border:1.5px solid #86efac; border-radius:0.65rem; padding:0.6rem 0.85rem; font-size:0.82rem; color:#15803d; font-family:'Fredoka',sans-serif;">
+                    🚚 <strong>Ongkir gratis</strong> untuk radius 3 km dari Telkom University. Jika melebihi radius, admin akan menghubungi kamu untuk konfirmasi ongkir tambahan.
+                </div>
             </div>
         </div>
 
@@ -403,7 +406,7 @@
 
             if (data.success) {
                 localStorage.removeItem('biterito_cart');
-                window.location.href = '/payment/' + data.order_code;
+                window.location.href = '/payment/pending';
             } else {
                 showToast('❌ Gagal membuat order, coba lagi!');
                 btn.textContent = '💳 Bayar Sekarang';

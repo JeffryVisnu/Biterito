@@ -161,7 +161,11 @@
 
     <h1 class="payment-title">💳 Pembayaran</h1>
     <p class="payment-subtitle">
-        Order <strong style="color: #b73f2e;">{{ $order->order_code }}</strong>
+        @if($order)
+            Order <strong style="color: #b73f2e;">{{ $order->order_code }}</strong>
+        @else
+            Selesaikan pembayaran untuk konfirmasi pesananmu
+        @endif
     </p>
 
     @if(session('success'))
@@ -171,47 +175,62 @@
     {{-- Ringkasan Order --}}
     <div class="pay-card">
         <p class="pay-card-title">📋 Ringkasan Order</p>
-        @foreach($order->items as $item)
-        <div class="pay-row">
-            <span>{{ $item->product->name }} x{{ $item->quantity }}</span>
-            <span>Rp {{ number_format($item->price * $item->quantity, 0, ',', '.') }}</span>
-        </div>
-        @endforeach
-        <hr class="pay-divider">
-        <div class="pay-total">
-            <span>Total</span>
-            <span style="color: #b73f2e;">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</span>
-        </div>
+        @if($pending)
+            @foreach($pending['items'] as $item)
+            <div class="pay-row">
+                <span>{{ $item['product_name'] }} x{{ $item['quantity'] }}</span>
+                <span>Rp {{ number_format($item['price'] * $item['quantity'], 0, ',', '.') }}</span>
+            </div>
+            @endforeach
+            <hr class="pay-divider">
+            <div class="pay-total">
+                <span>Total</span>
+                <span style="color: #b73f2e;">Rp {{ number_format($pending['total'], 0, ',', '.') }}</span>
+            </div>
+        @else
+            @foreach($order->items as $item)
+            <div class="pay-row">
+                <span>{{ $item->product->name }} x{{ $item->quantity }}</span>
+                <span>Rp {{ number_format($item->price * $item->quantity, 0, ',', '.') }}</span>
+            </div>
+            @endforeach
+            <hr class="pay-divider">
+            <div class="pay-total">
+                <span>Total</span>
+                <span style="color: #b73f2e;">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</span>
+            </div>
+        @endif
     </div>
 
-    {{-- Status Pembayaran --}}
-    @if($order->payment_status === 'paid')
+    {{-- Status: hanya untuk order yang sudah ada di DB --}}
+    @if($order && $order->payment_status === 'paid')
     <div class="success-box">
         <div style="font-size: 3rem; margin-bottom: 0.5rem;">✅</div>
         <p style="color: #15803d; font-weight: 700; font-size: 1.2rem; margin: 0 0 0.3rem;">Pembayaran Dikonfirmasi!</p>
         <p style="color: #16a34a; font-size: 0.875rem; margin: 0;">Terima kasih, order kamu sedang diproses.</p>
     </div>
-    @else
-
-    {{-- QRIS Code --}}
-    <div class="pay-card" style="text-align: center;">
-        <p class="pay-card-title" style="text-align: center;">📱 Scan QRIS untuk Membayar</p>
-        <img src="{{ asset('images/qris.png') }}" alt="QRIS Biterito" class="qris-img">
-        <p style="color: #7a5a5a; font-size: 0.8rem; margin: 0.5rem 0 0;">
-            Total: <strong style="color: #b73f2e;">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</strong>
-        </p>
-    </div>
-
-    {{-- Upload Bukti Bayar --}}
-    @if($order->payment_proof)
+    @elseif($order && $order->payment_proof)
     <div class="proof-sent-box">
         <p style="font-weight: 700; margin: 0 0 0.3rem;">📎 Bukti pembayaran sudah dikirim</p>
         <p style="margin: 0; font-size: 0.8rem;">Sedang menunggu verifikasi admin. Terima kasih!</p>
     </div>
     @else
+
+    {{-- QRIS --}}
+    <div class="pay-card" style="text-align: center;">
+        <p class="pay-card-title" style="text-align: center;">📱 Scan QRIS untuk Membayar</p>
+        <img src="{{ asset('images/qris.png') }}" alt="QRIS Biterito" class="qris-img">
+        <p style="color: #7a5a5a; font-size: 0.8rem; margin: 0.5rem 0 0;">
+            Total: <strong style="color: #b73f2e;">
+                Rp {{ number_format($pending ? $pending['total'] : $order->total_amount, 0, ',', '.') }}
+            </strong>
+        </p>
+    </div>
+
+    {{-- Upload Bukti Bayar --}}
     <div class="pay-card">
         <p class="pay-card-title">📎 Upload Bukti Pembayaran</p>
-        <form method="POST" action="{{ route('payment.upload-proof', $order->order_code) }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('payment.upload-proof') }}" enctype="multipart/form-data">
             @csrf
             <label class="upload-label">Pilih file bukti transfer / screenshot pembayaran</label>
             <input type="file" name="proof" accept=".jpg,.jpeg,.png,.pdf" class="upload-input" required>
@@ -224,14 +243,15 @@
             </button>
         </form>
     </div>
-    @endif
 
     {{-- Cara Bayar --}}
     <div class="info-box">
         <p style="font-weight: 600; margin: 0 0 0.3rem;">📌 Cara Bayar:</p>
         <ol>
             <li>Scan QR di atas dengan e-wallet atau m-banking</li>
-            <li>Masukkan nominal: <strong>Rp {{ number_format($order->total_amount, 0, ',', '.') }}</strong></li>
+            <li>Masukkan nominal: <strong>
+                Rp {{ number_format($pending ? $pending['total'] : $order->total_amount, 0, ',', '.') }}
+            </strong></li>
             <li>Selesaikan pembayaran</li>
             <li>Screenshot/foto bukti pembayaran</li>
             <li>Upload bukti di atas, lalu klik "Kirim Bukti Bayar"</li>

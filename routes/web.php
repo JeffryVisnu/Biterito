@@ -9,8 +9,9 @@ use App\Http\Controllers\AdminController;
 Route::get('/', [MenuController::class, 'index']);
 Route::get('/cart', [CartController::class, 'index']);
 Route::post('/checkout', [OrderController::class, 'checkout']);
+Route::get('/payment/pending', [OrderController::class, 'pendingPayment'])->name('payment.pending');
 Route::get('/payment/{orderCode}', [OrderController::class, 'payment'])->name('payment');
-Route::post('/payment/{orderCode}/upload-proof', [OrderController::class, 'uploadProof'])->name('payment.upload-proof');
+Route::post('/payment/upload-proof', [OrderController::class, 'uploadProof'])->name('payment.upload-proof');
 Route::get('/payment/{orderCode}/terima-kasih', [OrderController::class, 'proofSent'])->name('payment.proof-sent');
 
 Route::get('/admin/login', [AdminController::class, 'loginPage']);
@@ -20,3 +21,4 @@ Route::get('/admin/order/{id}', [AdminController::class, 'orderDetail']);
 Route::post('/admin/logout', [AdminController::class, 'logout']);
 Route::post('/admin/order/{id}/status', [AdminController::class, 'updateStatus']);
 Route::post('/admin/order/{id}/payment-status', [AdminController::class, 'updatePaymentStatus']);
+Route::delete('/admin/order/{id}', [AdminController::class, 'deleteOrder']);

@@ -104,4 +104,14 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', 'Status pembayaran berhasil diupdate!');
     }
+
+    public function deleteOrder($id)
+    {
+        if (!session('admin')) return redirect('/admin/login');
+
+        $order = Order::findOrFail($id);
+        $order->delete();
+
+        return redirect('/admin/dashboard')->with('success', 'Order berhasil dihapus!');
+    }
 }

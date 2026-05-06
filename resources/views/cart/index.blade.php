@@ -163,6 +163,20 @@
     }
     .back-btn:hover { background-color: #993623; }
     #cart-summary { display: none; }
+    .sesi-card {
+        border: 2px solid #d6cfc2;
+        border-radius: 0.75rem;
+        padding: 0.6rem 1rem;
+        text-align: center;
+        background: white;
+        color: #400a0f;
+        font-family: 'Fredoka', sans-serif;
+        transition: border-color 0.15s, background 0.15s;
+    }
+    .sesi-card.active {
+        border-color: #f69304;
+        background: #fff8e6;
+    }
     #toast-cart {
         position: fixed;
         bottom: 1.5rem;
@@ -229,6 +243,28 @@
             <div class="form-group">
                 <label class="form-label">Nomor WhatsApp *</label>
                 <input type="text" id="customer_phone" placeholder="08xxxxxxxxxx" class="form-input">
+                <div style="margin-top:0.5rem; background:#fff8e6; border:1.5px solid #f6c30a; border-radius:0.65rem; padding:0.6rem 0.85rem; font-size:0.82rem; color:#7a5a00; font-family:'Fredoka',sans-serif;">
+                    📦 Pesanan akan dikirim pada <strong>Minggu, 10 Mei 2026</strong>. Pilih sesi pengiriman di bawah.
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Sesi Pengiriman *</label>
+                <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+                    <label style="flex:1; min-width:120px; cursor:pointer;">
+                        <input type="radio" name="delivery_session" id="sesi1" value="sesi1" style="display:none;">
+                        <div class="sesi-card" data-sesi="sesi1">
+                            <div style="font-weight:700; font-size:0.95rem;">Sesi 1</div>
+                            <div style="font-size:0.85rem; color:#7a5a5a;">10:00 – 12:00</div>
+                        </div>
+                    </label>
+                    <label style="flex:1; min-width:120px; cursor:pointer;">
+                        <input type="radio" name="delivery_session" id="sesi2" value="sesi2" style="display:none;">
+                        <div class="sesi-card" data-sesi="sesi2">
+                            <div style="font-weight:700; font-size:0.95rem;">Sesi 2</div>
+                            <div style="font-size:0.85rem; color:#7a5a5a;">15:00 – 17:00</div>
+                        </div>
+                    </label>
+                </div>
             </div>
             <div class="form-group">
                 <label class="form-label">Email (opsional)</label>
@@ -332,9 +368,15 @@
         const phone = document.getElementById('customer_phone').value.trim();
         const address = document.getElementById('delivery_address').value.trim();
         const email = document.getElementById('customer_email').value.trim();
+        const sessionEl = document.querySelector('input[name="delivery_session"]:checked');
+        const deliverySession = sessionEl ? sessionEl.value : '';
 
         if (!name || !phone || !address) {
             showToast('⚠️ Nama, WhatsApp, dan alamat wajib diisi!');
+            return;
+        }
+        if (!deliverySession) {
+            showToast('⚠️ Pilih sesi pengiriman terlebih dahulu!');
             return;
         }
         if (cart.length === 0) {
@@ -358,6 +400,7 @@
                     customer_phone: phone,
                     customer_email: email,
                     delivery_address: address,
+                    delivery_session: deliverySession,
                     items: cart
                 })
             });
@@ -378,6 +421,16 @@
             btn.disabled = false;
         }
     }
+
+    // Session picker toggle
+    document.querySelectorAll('.sesi-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const sesi = card.dataset.sesi;
+            document.getElementById(sesi).checked = true;
+            document.querySelectorAll('.sesi-card').forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+        });
+    });
 
     updateCartCount();
     renderCart();

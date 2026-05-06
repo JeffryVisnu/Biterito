@@ -15,6 +15,7 @@ class OrderController extends Controller
             'customer_name'    => 'required|string|max:255',
             'customer_phone'   => 'required|string|max:20',
             'delivery_address' => 'required|string|max:500',
+            'delivery_session' => 'required|in:sesi1,sesi2',
             'items'            => 'required|array|min:1',
             'items.*.id'       => 'required|integer|exists:products,id',
             'items.*.qty'      => 'required|integer|min:1|max:99',
@@ -40,6 +41,7 @@ class OrderController extends Controller
             'total_amount'     => $total,
             'payment_status'   => 'unchecked',
             'order_status'     => 'waiting',
+            'delivery_session' => $request->delivery_session,
         ]);
 
         foreach ($request->items as $item) {

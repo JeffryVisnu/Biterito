@@ -20,10 +20,9 @@ return new class extends Migration
             $table->text('delivery_address');
             $table->string('order_type'); // preorder / bazar
             $table->decimal('total_amount', 10, 2);
-            $table->string('payment_status')->default('pending'); // pending/paid/failed
+            $table->string('payment_status')->default('unchecked'); // unchecked/paid
             $table->string('order_status')->default('waiting'); // waiting/process/ready/delivered
-            $table->string('midtrans_snap_token')->nullable();
-            $table->string('midtrans_order_id')->nullable();
+            $table->string('payment_proof')->nullable(); // path file bukti bayar
             $table->timestamp('scheduled_pickup')->nullable(); // untuk preorder
             $table->timestamps();
         });

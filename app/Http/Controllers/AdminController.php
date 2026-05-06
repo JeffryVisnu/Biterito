@@ -40,7 +40,7 @@ class AdminController extends Controller
         $query = Order::orderBy('created_at', 'desc');
 
         if ($request->status) {
-            $paymentStatuses = ['pending', 'paid', 'failed'];
+            $paymentStatuses = ['unchecked', 'paid'];
             if (in_array($request->status, $paymentStatuses)) {
                 $query->where('payment_status', $request->status);
             } else {
@@ -48,18 +48,18 @@ class AdminController extends Controller
             }
         }
 
-        $orders = $query->paginate(10)->appends(request()->query());
-        $totalOrders    = Order::count();
-        $paidOrders     = Order::where('payment_status', 'paid')->count();
-        $pendingOrders  = Order::where('payment_status', 'pending')->count();
-        $totalRevenue   = Order::where('payment_status', 'paid')->sum('total_amount');
-        $waitingOrders  = Order::where('order_status', 'waiting')->count();
-        $processOrders  = Order::where('order_status', 'process')->count();
-        $readyOrders    = Order::where('order_status', 'ready')->count();
+        $orders          = $query->paginate(10)->appends(request()->query());
+        $totalOrders     = Order::count();
+        $paidOrders      = Order::where('payment_status', 'paid')->count();
+        $uncheckedOrders = Order::where('payment_status', 'unchecked')->count();
+        $totalRevenue    = Order::where('payment_status', 'paid')->sum('total_amount');
+        $waitingOrders   = Order::where('order_status', 'waiting')->count();
+        $processOrders   = Order::where('order_status', 'process')->count();
+        $readyOrders     = Order::where('order_status', 'ready')->count();
         $deliveredOrders = Order::where('order_status', 'delivered')->count();
 
         return view('admin.dashboard', compact(
-            'orders', 'totalOrders', 'paidOrders', 'pendingOrders', 'totalRevenue',
+            'orders', 'totalOrders', 'paidOrders', 'uncheckedOrders', 'totalRevenue',
             'waitingOrders', 'processOrders', 'readyOrders', 'deliveredOrders'
         ));
     }
@@ -90,5 +90,18 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', 'Status order berhasil diupdate!');
     }
-}
 
+    public function updatePaymentStatus(Request $request, $id)
+    {
+        if (!session('admin')) return redirect('/admin/login');
+
+        $request->validate([
+            'payment_status' => 'required|in:unchecked,paid',
+        ]);
+
+        $order = Order::findOrFail($id);
+        $order->update(['payment_status' => $request->payment_status]);
+
+        return redirect()->back()->with('success', 'Status pembayaran berhasil diupdate!');
+    }
+}

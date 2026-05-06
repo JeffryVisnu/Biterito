@@ -116,6 +116,8 @@
             outline: none;
         }
         .status-select:focus { border-color: #6366f1; }
+        .status-select-pay-unchecked { border-color: #fbbf24; color: #92400e; background: #fffbeb; }
+        .status-select-pay-paid      { border-color: #86efac; color: #15803d; background: #f0fdf4; }
 
         /* Table */
         .orders-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
@@ -286,9 +288,13 @@
                             </td>
                             <td style="font-weight: 600;">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</td>
                             <td>
-                                <span class="badge badge-{{ $order->payment_status }}">
-                                    {{ $order->payment_status === 'unchecked' ? 'Unchecked' : 'Paid' }}
-                                </span>
+                                <form method="POST" action="/admin/order/{{ $order->id }}/payment-status">
+                                    @csrf
+                                    <select name="payment_status" class="status-select status-select-pay-{{ $order->payment_status }}" onchange="this.form.submit()">
+                                        <option value="unchecked" {{ $order->payment_status == 'unchecked' ? 'selected' : '' }}>Unchecked</option>
+                                        <option value="paid"      {{ $order->payment_status == 'paid'      ? 'selected' : '' }}>✅ Paid</option>
+                                    </select>
+                                </form>
                             </td>
                             <td>
                                 <form method="POST" action="/admin/order/{{ $order->id }}/status">
@@ -332,9 +338,13 @@
             <div class="mobile-order-card">
                 <div class="mobile-order-card-header">
                     <span class="order-code">{{ $order->order_code }}</span>
-                    <span class="badge badge-{{ $order->payment_status }}">
-                        {{ $order->payment_status === 'unchecked' ? 'Unchecked' : 'Paid' }}
-                    </span>
+                    <form method="POST" action="/admin/order/{{ $order->id }}/payment-status" style="margin:0;">
+                        @csrf
+                        <select name="payment_status" class="status-select status-select-pay-{{ $order->payment_status }}" onchange="this.form.submit()">
+                            <option value="unchecked" {{ $order->payment_status == 'unchecked' ? 'selected' : '' }}>Unchecked</option>
+                            <option value="paid"      {{ $order->payment_status == 'paid'      ? 'selected' : '' }}>✅ Paid</option>
+                        </select>
+                    </form>
                 </div>
                 <p class="customer-name">{{ $order->customer_name }}</p>
                 <p class="customer-phone">{{ $order->customer_phone }}</p>

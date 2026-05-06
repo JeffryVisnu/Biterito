@@ -267,10 +267,6 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="form-label">Email (opsional)</label>
-                <input type="email" id="customer_email" placeholder="email@kamu.com" class="form-input">
-            </div>
-            <div class="form-group">
                 <label class="form-label">Alamat Pengiriman *</label>
                 <textarea id="delivery_address" placeholder="Masukkan alamat lengkap kamu" rows="3" class="form-input" style="resize: vertical;"></textarea>
             </div>
@@ -367,7 +363,6 @@
         const name = document.getElementById('customer_name').value.trim();
         const phone = document.getElementById('customer_phone').value.trim();
         const address = document.getElementById('delivery_address').value.trim();
-        const email = document.getElementById('customer_email').value.trim();
         const sessionEl = document.querySelector('input[name="delivery_session"]:checked');
         const deliverySession = sessionEl ? sessionEl.value : '';
 
@@ -398,7 +393,6 @@
                 body: JSON.stringify({
                     customer_name: name,
                     customer_phone: phone,
-                    customer_email: email,
                     delivery_address: address,
                     delivery_session: deliverySession,
                     items: cart

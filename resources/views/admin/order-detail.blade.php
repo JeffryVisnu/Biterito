@@ -83,12 +83,6 @@
                 <span class="text-gray-500">WhatsApp</span>
                 <a href="https://wa.me/{{ $order->customer_phone }}" target="_blank" class="font-semibold text-green-600">{{ $order->customer_phone }}</a>
             </div>
-            @if($order->customer_email)
-            <div class="flex justify-between text-sm">
-                <span class="text-gray-500">Email</span>
-                <span class="font-semibold">{{ $order->customer_email }}</span>
-            </div>
-            @endif
             <div class="flex justify-between text-sm">
                 <span class="text-gray-500">Alamat</span>
                 <span class="font-semibold text-right max-w-xs">{{ $order->delivery_address }}</span>

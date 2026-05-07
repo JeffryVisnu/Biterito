@@ -5,7 +5,8 @@
       "PowerShell($lines = Get-Content \"d:\\\\Kuliah Telkom University\\\\Semester 6\\\\Kewirus\\\\biterito\\\\storage\\\\logs\\\\laravel.log\"; $lines | Where-Object { $_ -match '\"message\":|Undefined vari' } | Select-Object -Last 5)",
       "PowerShell($lines = Get-Content \"d:\\\\Kuliah Telkom University\\\\Semester 6\\\\Kewirus\\\\biterito\\\\storage\\\\logs\\\\laravel.log\"; $lines | Where-Object { $_ -match '^\\\\[2026-05-06 \\(1[0-9]|09:[5-9]\\)' } | Select-Object -First 30)",
       "PowerShell($lines = Get-Content \"d:\\\\Kuliah Telkom University\\\\Semester 6\\\\Kewirus\\\\biterito\\\\storage\\\\logs\\\\laravel.log\"; Write-Host \"Total lines: $\\($lines.Count\\)\"; $lines | Select-Object -Last 5)",
-      "PowerShell($lines = Get-Content \"d:\\\\Kuliah Telkom University\\\\Semester 6\\\\Kewirus\\\\biterito\\\\storage\\\\logs\\\\laravel.log\"; $startIdx = \\($lines | Select-String '\\\\[2026-05-06 09:31' | Select-Object -Last 1\\).LineNumber - 1; $lines[$startIdx..\\($startIdx+3\\)])"
+      "PowerShell($lines = Get-Content \"d:\\\\Kuliah Telkom University\\\\Semester 6\\\\Kewirus\\\\biterito\\\\storage\\\\logs\\\\laravel.log\"; $startIdx = \\($lines | Select-String '\\\\[2026-05-06 09:31' | Select-Object -Last 1\\).LineNumber - 1; $lines[$startIdx..\\($startIdx+3\\)])",
+      "Bash(composer require *)"
     ]
   }
 }

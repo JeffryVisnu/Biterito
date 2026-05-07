@@ -127,24 +127,26 @@
         <h3 class="font-bold text-gray-700 mb-4">📎 Bukti Pembayaran</h3>
         @if($order->payment_proof)
             @php
-                $ext = pathinfo($order->payment_proof, PATHINFO_EXTENSION);
-                $isPdf = strtolower($ext) === 'pdf';
+                $proofUrl = str_starts_with($order->payment_proof, 'http')
+                    ? $order->payment_proof
+                    : asset('storage/' . $order->payment_proof);
+                $isPdf = str_contains(strtolower($proofUrl), '.pdf');
             @endphp
             @if($isPdf)
             <div class="flex items-center gap-3">
-                <a href="{{ asset('storage/' . $order->payment_proof) }}" target="_blank"
+                <a href="{{ $proofUrl }}" target="_blank"
                    class="inline-flex items-center gap-2 bg-red-50 hover:bg-red-100 text-red-700 font-semibold text-sm px-4 py-2 rounded-lg border border-red-200 transition">
                     📄 Lihat Bukti Bayar (PDF)
                 </a>
             </div>
             @else
             <div class="space-y-3">
-                <img src="{{ asset('storage/' . $order->payment_proof) }}"
+                <img src="{{ $proofUrl }}"
                      alt="Bukti Pembayaran"
                      class="rounded-xl border border-gray-200 max-w-full"
                      style="max-height: 400px; object-fit: contain;">
                 <div>
-                    <a href="{{ asset('storage/' . $order->payment_proof) }}" target="_blank"
+                    <a href="{{ $proofUrl }}" target="_blank"
                        class="inline-flex items-center gap-2 bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold text-sm px-4 py-2 rounded-lg border border-blue-200 transition">
                         🔍 Lihat Bukti Bayar (Ukuran Penuh)
                     </a>

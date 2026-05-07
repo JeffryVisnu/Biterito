@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use Cloudinary\Cloudinary;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -104,8 +105,12 @@ class OrderController extends Controller
             ]);
         }
 
-        $path = $request->file('proof')->store('payment-proofs', 'public');
-        $order->update(['payment_proof' => $path]);
+        $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
+        $result = $cloudinary->uploadApi()->upload($request->file('proof')->getRealPath(), [
+            'folder'        => 'biterito/payment-proofs',
+            'resource_type' => 'auto',
+        ]);
+        $order->update(['payment_proof' => $result['secure_url']]);
 
         session()->forget('pending_order');
 

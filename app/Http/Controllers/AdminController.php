@@ -62,13 +62,12 @@ class AdminController extends Controller
         $recapFrom = $request->recap_from;
         $recapTo   = $request->recap_to;
 
-        $productSummary = OrderItem::with('product')
-            ->select('product_id', DB::raw('SUM(quantity) as total_qty'))
+        $productSummary = OrderItem::with(['product', 'order'])
             ->when($recapFrom, fn($q) => $q->whereHas('order', fn($o) => $o->whereDate('created_at', '>=', $recapFrom)))
             ->when($recapTo,   fn($q) => $q->whereHas('order', fn($o) => $o->whereDate('created_at', '<=', $recapTo)))
+            ->get()
             ->groupBy('product_id')
-            ->orderByDesc('total_qty')
-            ->get();
+            ->sortByDesc(fn($items) => $items->sum('quantity'));
 
         return view('admin.dashboard', compact(
             'orders', 'totalOrders', 'paidOrders', 'uncheckedOrders', 'totalRevenue',

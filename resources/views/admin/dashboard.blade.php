@@ -288,15 +288,28 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($productSummary as $item)
-                    <tr>
-                        <td style="font-weight: 600; color: #1f2937;">{{ $item->product->name }}</td>
+                    @forelse($productSummary as $productId => $items)
+                    <tr style="background: #f9fafb;">
+                        <td style="font-weight: 700; color: #1f2937;">
+                            {{ $items->first()->product->name }}
+                        </td>
                         <td style="text-align: right;">
                             <span style="background: #fef3c7; color: #92400e; padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 700;">
-                                {{ $item->total_qty }} porsi
+                                {{ $items->sum('quantity') }} porsi
                             </span>
                         </td>
                     </tr>
+                    @foreach($items as $item)
+                    <tr>
+                        <td style="padding-left: 1.25rem; font-size: 0.8rem; color: #4b5563;">
+                            👤 {{ $item->order->customer_name }}
+                            @if($item->notes)
+                            <span style="color: #d97706; margin-left: 0.4rem;">📝 {{ $item->notes }}</span>
+                            @endif
+                        </td>
+                        <td style="text-align: right; font-size: 0.8rem; color: #6b7280;">x{{ $item->quantity }}</td>
+                    </tr>
+                    @endforeach
                     @empty
                     <tr>
                         <td colspan="2" style="text-align: center; color: #9ca3af; padding: 1.5rem 0;">Belum ada pesanan</td>

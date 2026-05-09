@@ -254,6 +254,59 @@
         </div>
     </div>
 
+    {{-- Rekap per Menu --}}
+    <div class="admin-card" style="margin-bottom: 1.5rem;">
+        <h2 class="admin-card-title">🍽️ Rekap Pesanan per Menu</h2>
+
+        {{-- Filter Tanggal --}}
+        <form method="GET" action="/admin/dashboard" style="display: flex; gap: 0.75rem; align-items: flex-end; flex-wrap: wrap; margin-bottom: 1.25rem;">
+            @if(request('status'))
+            <input type="hidden" name="status" value="{{ request('status') }}">
+            @endif
+            <div>
+                <label style="display: block; font-size: 0.75rem; color: #6b7280; font-weight: 600; margin-bottom: 0.25rem;">Dari Tanggal</label>
+                <input type="date" name="recap_from" value="{{ $recapFrom }}"
+                    style="border: 1.5px solid #e5e7eb; border-radius: 0.5rem; padding: 0.35rem 0.6rem; font-size: 0.8rem; font-family: 'Poppins', sans-serif; color: #374151;">
+            </div>
+            <div>
+                <label style="display: block; font-size: 0.75rem; color: #6b7280; font-weight: 600; margin-bottom: 0.25rem;">Sampai Tanggal</label>
+                <input type="date" name="recap_to" value="{{ $recapTo }}"
+                    style="border: 1.5px solid #e5e7eb; border-radius: 0.5rem; padding: 0.35rem 0.6rem; font-size: 0.8rem; font-family: 'Poppins', sans-serif; color: #374151;">
+            </div>
+            <button type="submit" style="background: #dc2626; color: white; border: none; border-radius: 0.5rem; padding: 0.4rem 1rem; font-size: 0.8rem; font-weight: 600; font-family: 'Poppins', sans-serif; cursor: pointer;">Filter</button>
+            @if($recapFrom || $recapTo)
+            <a href="/admin/dashboard" style="font-size: 0.78rem; color: #6b7280; text-decoration: none; align-self: center;">Reset</a>
+            @endif
+        </form>
+
+        <div style="overflow-x: auto;">
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>Menu</th>
+                        <th style="text-align: right;">Total Dipesan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($productSummary as $item)
+                    <tr>
+                        <td style="font-weight: 600; color: #1f2937;">{{ $item->product->name }}</td>
+                        <td style="text-align: right;">
+                            <span style="background: #fef3c7; color: #92400e; padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 700;">
+                                {{ $item->total_qty }} porsi
+                            </span>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="2" style="text-align: center; color: #9ca3af; padding: 1.5rem 0;">Belum ada pesanan</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
     {{-- Order List --}}
     <div class="admin-card">
         <h2 class="admin-card-title">📋 Daftar Order</h2>

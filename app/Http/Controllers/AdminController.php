@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -58,9 +59,21 @@ class AdminController extends Controller
         $readyOrders     = Order::where('order_status', 'ready')->count();
         $deliveredOrders = Order::where('order_status', 'delivered')->count();
 
+        $recapFrom = $request->recap_from;
+        $recapTo   = $request->recap_to;
+
+        $productSummary = OrderItem::with('product')
+            ->select('product_id', DB::raw('SUM(quantity) as total_qty'))
+            ->when($recapFrom, fn($q) => $q->whereHas('order', fn($o) => $o->whereDate('created_at', '>=', $recapFrom)))
+            ->when($recapTo,   fn($q) => $q->whereHas('order', fn($o) => $o->whereDate('created_at', '<=', $recapTo)))
+            ->groupBy('product_id')
+            ->orderByDesc('total_qty')
+            ->get();
+
         return view('admin.dashboard', compact(
             'orders', 'totalOrders', 'paidOrders', 'uncheckedOrders', 'totalRevenue',
-            'waitingOrders', 'processOrders', 'readyOrders', 'deliveredOrders'
+            'waitingOrders', 'processOrders', 'readyOrders', 'deliveredOrders',
+            'productSummary', 'recapFrom', 'recapTo'
         ));
     }
 

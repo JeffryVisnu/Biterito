@@ -49,6 +49,10 @@ class AdminController extends Controller
             }
         }
 
+        if ($request->sesi) {
+            $query->where('delivery_session', $request->sesi);
+        }
+
         $orders          = $query->paginate(10)->appends(request()->query());
         $totalOrders     = Order::count();
         $paidOrders      = Order::where('payment_status', 'paid')->count();
@@ -61,10 +65,12 @@ class AdminController extends Controller
 
         $recapFrom = $request->recap_from;
         $recapTo   = $request->recap_to;
+        $recapSesi = $request->recap_sesi;
 
         $productSummary = OrderItem::with(['product', 'order'])
             ->when($recapFrom, fn($q) => $q->whereHas('order', fn($o) => $o->whereDate('created_at', '>=', $recapFrom)))
             ->when($recapTo,   fn($q) => $q->whereHas('order', fn($o) => $o->whereDate('created_at', '<=', $recapTo)))
+            ->when($recapSesi, fn($q) => $q->whereHas('order', fn($o) => $o->where('delivery_session', $recapSesi)))
             ->get()
             ->groupBy('product_id')
             ->sortByDesc(fn($items) => $items->sum('quantity'));
@@ -72,7 +78,7 @@ class AdminController extends Controller
         return view('admin.dashboard', compact(
             'orders', 'totalOrders', 'paidOrders', 'uncheckedOrders', 'totalRevenue',
             'waitingOrders', 'processOrders', 'readyOrders', 'deliveredOrders',
-            'productSummary', 'recapFrom', 'recapTo'
+            'productSummary', 'recapFrom', 'recapTo', 'recapSesi'
         ));
     }
 

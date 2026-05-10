@@ -349,31 +349,33 @@
 
         {{-- Filter Tabs --}}
         @php
-            $s = request('sesi') ? '&sesi=' . request('sesi') : '';
-            $st = request('status') ? '&status=' . request('status') : '';
+            $appendSesi   = request('sesi')   ? '&sesi='   . request('sesi')   : '';
+            $appendStatus = request('status') ? '&status=' . request('status') : '';
+            $baseSesi     = request('sesi')   ? '?sesi='   . request('sesi')   : '';
+            $baseStatus   = request('status') ? '?status=' . request('status') : '';
         @endphp
         <div class="filter-bar">
-            <a href="/admin/dashboard{{ $s }}"
+            <a href="/admin/dashboard{{ $baseSesi }}"
                class="filter-tab {{ !request('status') ? 'active-all' : 'inactive' }}">Semua</a>
-            <a href="/admin/dashboard?status=unchecked{{ $s }}"
+            <a href="/admin/dashboard?status=unchecked{{ $appendSesi }}"
                class="filter-tab {{ request('status') == 'unchecked' ? 'active-unchecked' : 'inactive' }}">Unchecked</a>
-            <a href="/admin/dashboard?status=paid{{ $s }}"
+            <a href="/admin/dashboard?status=paid{{ $appendSesi }}"
                class="filter-tab {{ request('status') == 'paid' ? 'active-paid' : 'inactive' }}">Paid</a>
-            <a href="/admin/dashboard?status=waiting{{ $s }}"
+            <a href="/admin/dashboard?status=waiting{{ $appendSesi }}"
                class="filter-tab {{ request('status') == 'waiting' ? 'active-waiting' : 'inactive' }}">⏳ Waiting</a>
-            <a href="/admin/dashboard?status=process{{ $s }}"
+            <a href="/admin/dashboard?status=process{{ $appendSesi }}"
                class="filter-tab {{ request('status') == 'process' ? 'active-process' : 'inactive' }}">🔧 Process</a>
-            <a href="/admin/dashboard?status=ready{{ $s }}"
+            <a href="/admin/dashboard?status=ready{{ $appendSesi }}"
                class="filter-tab {{ request('status') == 'ready' ? 'active-ready' : 'inactive' }}">✅ Ready</a>
-            <a href="/admin/dashboard?status=delivered{{ $s }}"
+            <a href="/admin/dashboard?status=delivered{{ $appendSesi }}"
                class="filter-tab {{ request('status') == 'delivered' ? 'active-delivered' : 'inactive' }}">🚚 Delivered</a>
         </div>
         <div class="filter-bar" style="margin-bottom: 1.25rem;">
-            <a href="/admin/dashboard{{ $st }}"
+            <a href="/admin/dashboard{{ $baseStatus }}"
                class="filter-tab {{ !request('sesi') ? 'active-all' : 'inactive' }}">Semua Sesi</a>
-            <a href="/admin/dashboard?sesi=sesi1{{ $st }}"
+            <a href="/admin/dashboard?sesi=sesi1{{ $appendStatus }}"
                class="filter-tab {{ request('sesi') == 'sesi1' ? 'active-process' : 'inactive' }}">🕙 Sesi 1 (10:00–12:00)</a>
-            <a href="/admin/dashboard?sesi=sesi2{{ $st }}"
+            <a href="/admin/dashboard?sesi=sesi2{{ $appendStatus }}"
                class="filter-tab {{ request('sesi') == 'sesi2' ? 'active-ready' : 'inactive' }}">🕙 Sesi 2 (15:00–17:00)</a>
         </div>
 

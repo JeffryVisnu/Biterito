@@ -244,7 +244,7 @@
                 <label class="form-label">Nomor WhatsApp *</label>
                 <input type="text" id="customer_phone" placeholder="08xxxxxxxxxx" class="form-input">
                 <div style="margin-top:0.5rem; background:#fff8e6; border:1.5px solid #f6c30a; border-radius:0.65rem; padding:0.6rem 0.85rem; font-size:0.82rem; color:#7a5a00; font-family:'Fredoka',sans-serif;">
-                    📦 Pesanan akan dikirim pada <strong>Minggu, 10 Mei 2026</strong>. Pilih sesi pengiriman di bawah.
+                    📦 Pesanan akan dikirim pada <strong>Kamis, 14 Mei 2026</strong>. Pilih sesi pengiriman di bawah.
                 </div>
             </div>
             <div class="form-group">

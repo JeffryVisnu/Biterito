@@ -92,7 +92,7 @@
                 <span class="text-gray-500">Sesi Pengiriman</span>
                 <span class="font-semibold">
                     {{ $order->delivery_session === 'sesi1' ? 'Sesi 1 (10:00–12:00)' : 'Sesi 2 (15:00–17:00)' }}
-                    &nbsp;· Minggu, 10 Mei 2026
+                    &nbsp;· Kamis, 14 Mei 2026
                 </span>
             </div>
             @endif

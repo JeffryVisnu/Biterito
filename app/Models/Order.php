@@ -18,7 +18,8 @@ class Order extends Model
         'order_status',
         'payment_proof',
         'scheduled_pickup',
-        'delivery_session'
+        'delivery_session',
+        'delivery_date'
     ];
 
     public function items()

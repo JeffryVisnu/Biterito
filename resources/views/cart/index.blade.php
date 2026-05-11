@@ -242,7 +242,10 @@
             </div>
             <div class="form-group">
                 <label class="form-label">Nomor WhatsApp *</label>
-                <input type="text" id="customer_phone" placeholder="08xxxxxxxxxx" class="form-input">
+                <div style="display:flex; align-items:stretch; border:1.5px solid #d6cfc2; border-radius:0.75rem; overflow:hidden; background:white;">
+                    <span style="padding:0.55rem 0.75rem; background:#f5f0e8; color:#7a5a00; font-family:'Fredoka',sans-serif; font-size:0.9rem; border-right:1.5px solid #d6cfc2; white-space:nowrap; display:flex; align-items:center;">+62</span>
+                    <input type="text" id="customer_phone" placeholder="8xxxxxxxxxx" style="flex:1; border:none; outline:none; padding:0.55rem 0.9rem; font-size:0.9rem; font-family:'Fredoka',sans-serif; background:transparent; color:#400a0f; width:0;">
+                </div>
                 <div style="margin-top:0.5rem; background:#fff8e6; border:1.5px solid #f6c30a; border-radius:0.65rem; padding:0.6rem 0.85rem; font-size:0.82rem; color:#7a5a00; font-family:'Fredoka',sans-serif;">
                     📦 Pesanan akan dikirim pada <strong>Kamis, 14 Mei 2026</strong>. Pilih sesi pengiriman di bawah.
                 </div>
@@ -364,12 +367,13 @@
 
     async function checkout() {
         const name = document.getElementById('customer_name').value.trim();
-        const phone = document.getElementById('customer_phone').value.trim();
+        const phoneRaw = document.getElementById('customer_phone').value.trim();
+        const phone = '62' + phoneRaw.replace(/^0+/, '');
         const address = document.getElementById('delivery_address').value.trim();
         const sessionEl = document.querySelector('input[name="delivery_session"]:checked');
         const deliverySession = sessionEl ? sessionEl.value : '';
 
-        if (!name || !phone || !address) {
+        if (!name || !phoneRaw || !address) {
             showToast('⚠️ Nama, WhatsApp, dan alamat wajib diisi!');
             return;
         }

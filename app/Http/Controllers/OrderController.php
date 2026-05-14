@@ -93,7 +93,7 @@ class OrderController extends Controller
             'payment_status'   => 'unchecked',
             'order_status'     => 'waiting',
             'delivery_session' => $pending['delivery_session'],
-            'delivery_date'    => 'Kamis, 14 Mei 2026',
+            'delivery_date'    => 'Kamis, 21 Mei 2026',
         ]);
 
         foreach ($pending['items'] as $item) {

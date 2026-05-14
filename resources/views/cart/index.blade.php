@@ -247,7 +247,7 @@
                     <input type="text" id="customer_phone" placeholder="8xxxxxxxxxx" style="flex:1; border:none; outline:none; padding:0.55rem 0.9rem; font-size:0.9rem; font-family:'Fredoka',sans-serif; background:transparent; color:#400a0f; width:0;">
                 </div>
                 <div style="margin-top:0.5rem; background:#fff8e6; border:1.5px solid #f6c30a; border-radius:0.65rem; padding:0.6rem 0.85rem; font-size:0.82rem; color:#7a5a00; font-family:'Fredoka',sans-serif;">
-                    📦 Pesanan akan dikirim pada <strong>Kamis, 14 Mei 2026</strong>. Pilih sesi pengiriman di bawah.
+                    📦 Pesanan akan dikirim pada <strong>Kamis, 21 Mei 2026</strong>. Pilih sesi pengiriman di bawah.
                 </div>
             </div>
             <div class="form-group">

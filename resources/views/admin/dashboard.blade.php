@@ -171,6 +171,34 @@
             margin-bottom: 1rem;
             font-size: 0.875rem;
         }
+        .alert-wa {
+            background: #f0fdf4;
+            border: 1.5px solid #22c55e;
+            color: #166534;
+            padding: 0.85rem 1rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .btn-wa {
+            background: #25d366;
+            color: #fff;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1.1rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            white-space: nowrap;
+            font-family: 'Poppins', sans-serif;
+        }
+        .btn-wa:hover { background: #1ebe5d; }
 
         /* Delete button */
         .btn-delete {
@@ -212,6 +240,52 @@
 
     @if(session('success'))
     <div class="alert-success">✅ {{ session('success') }}</div>
+    @endif
+
+    @if(session('wa_data'))
+    <div class="alert-wa" id="wa-banner">
+        @if(session('wa_data')['type'] === 'process')
+        <span>📲 Kirim notifikasi WhatsApp ke <strong>{{ session('wa_data')['name'] }}</strong> bahwa pesanannya sedang diproses.</span>
+        @elseif(session('wa_data')['type'] === 'ready')
+        <span>📲 Kirim notifikasi WhatsApp ke <strong>{{ session('wa_data')['name'] }}</strong> bahwa pesanannya sedang diantar.</span>
+        @else
+        <span>📲 Kirim notifikasi WhatsApp ke <strong>{{ session('wa_data')['name'] }}</strong> ucapan terima kasih.</span>
+        @endif
+        <a href="#" class="btn-wa" onclick="openWA(); document.getElementById('wa-banner').remove(); return false;">Buka WhatsApp</a>
+    </div>
+    <script>
+    (function () {
+        const d = {!! json_encode(session('wa_data')) !!};
+        let msg;
+        if (d.type === 'process') {
+            const lines = d.items.map(i => '- ' + i.name + ' x' + i.qty).join('\n');
+            msg =
+                'Haloo kak ' + d.name + '!!~\n\n' +
+                'Kami dari Biterito ya~ Mau ngabarin nih kalau pesanan kamu hampir siap dan akan diantarkan! \n\n' +
+                'Detail Order:\n' + lines + '\n\n' +
+                'Dikirim ke: ' + d.address + '\n' +
+                'Estimasi tiba: ' + d.sesi + '\n\n' +
+                'Mohon pastiin ada yang nerima di lokasi ya!\n' +
+                'Kalau ada kendala atau mau tanya-tanya, balas aja langsung di sini\n\n' +
+                'Makasii banyak udah order Biterito!';
+        } else if (d.type === 'ready') {
+            msg =
+                'Halo kak ' + d.name + '\n' +
+                'Kami sedang akan antarkan pesanan kakak sekarang, mohon ditunggu';
+        } else {
+            msg =
+                'Terimakasiih banyak udah order di Biterito~ Semoga Biterito-nya enak dan sesuai ekspektasi ya! \n\n' +
+                'Kalau berkenan, boleh dong kasih tau gimana kesan kamu setelah nyobain? Kritik & saran juga sangat welcome kok, biar Biterito makin baik ke depannya! \n\n' +
+                'Sampai ketemu di order berikutnya~';
+        }
+        window.openWA = function () {
+            window.open('https://wa.me/' + d.phone + '?text=' + encodeURIComponent(msg), '_blank');
+        };
+        document.addEventListener('DOMContentLoaded', function () {
+            try { window.openWA(); } catch (e) {}
+        });
+    })();
+    </script>
     @endif
 
     {{-- Stats Row 1 --}}

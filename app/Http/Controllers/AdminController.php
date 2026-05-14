@@ -106,6 +106,65 @@ class AdminController extends Controller
         $order = Order::findOrFail($id);
         $order->update(['order_status' => $request->order_status]);
 
+        if ($request->order_status === 'process') {
+            $order->load('items.product');
+
+            $phone = preg_replace('/\D/', '', $order->customer_phone);
+            if (str_starts_with($phone, '0')) {
+                $phone = '62' . substr($phone, 1);
+            }
+
+            $sesiLabel = match($order->delivery_session) {
+                'sesi1' => 'Sesi 1 (10:00 - 12:00)',
+                'sesi2' => 'Sesi 2 (15:00 - 17:00)',
+                default => $order->delivery_session ?? '-',
+            };
+
+            return redirect()->back()
+                ->with('success', 'Status order berhasil diupdate!')
+                ->with('wa_data', [
+                    'type'    => 'process',
+                    'phone'   => $phone,
+                    'name'    => $order->customer_name,
+                    'items'   => $order->items->map(fn($item) => [
+                        'name' => $item->product->name,
+                        'qty'  => $item->quantity,
+                    ])->values()->toArray(),
+                    'address' => $order->delivery_address,
+                    'sesi'    => $sesiLabel,
+                ]);
+        }
+
+        if ($request->order_status === 'ready') {
+            $phone = preg_replace('/\D/', '', $order->customer_phone);
+            if (str_starts_with($phone, '0')) {
+                $phone = '62' . substr($phone, 1);
+            }
+
+            return redirect()->back()
+                ->with('success', 'Status order berhasil diupdate!')
+                ->with('wa_data', [
+                    'type'  => 'ready',
+                    'phone' => $phone,
+                    'name'  => $order->customer_name,
+                ]);
+        }
+
+        if ($request->order_status === 'delivered') {
+            $phone = preg_replace('/\D/', '', $order->customer_phone);
+            if (str_starts_with($phone, '0')) {
+                $phone = '62' . substr($phone, 1);
+            }
+
+            return redirect()->back()
+                ->with('success', 'Status order berhasil diupdate!')
+                ->with('wa_data', [
+                    'type'  => 'delivered',
+                    'phone' => $phone,
+                    'name'  => $order->customer_name,
+                ]);
+        }
+
         return redirect()->back()->with('success', 'Status order berhasil diupdate!');
     }
 

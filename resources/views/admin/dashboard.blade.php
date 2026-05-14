@@ -427,29 +427,54 @@
             $appendStatus = request('status') ? '&status=' . request('status') : '';
             $baseSesi     = request('sesi')   ? '?sesi='   . request('sesi')   : '';
             $baseStatus   = request('status') ? '?status=' . request('status') : '';
+
+            $dateQuery  = http_build_query(array_filter(['date_from' => request('date_from'), 'date_to' => request('date_to')]));
+            $appendDate = $dateQuery ? '&' . $dateQuery : '';
         @endphp
+
+        {{-- Filter Tanggal --}}
+        <form method="GET" action="/admin/dashboard" style="display:flex; gap:0.75rem; align-items:flex-end; flex-wrap:wrap; margin-bottom:1rem;">
+            @if(request('status'))<input type="hidden" name="status" value="{{ request('status') }}">@endif
+            @if(request('sesi'))<input type="hidden" name="sesi" value="{{ request('sesi') }}">@endif
+            <div>
+                <label style="display:block; font-size:0.72rem; color:#6b7280; font-weight:600; margin-bottom:0.2rem;">Dari Tanggal</label>
+                <input type="date" name="date_from" value="{{ $dateFrom }}"
+                    style="border:1.5px solid #e5e7eb; border-radius:0.5rem; padding:0.3rem 0.55rem; font-size:0.8rem; font-family:'Poppins',sans-serif; color:#374151;">
+            </div>
+            <div>
+                <label style="display:block; font-size:0.72rem; color:#6b7280; font-weight:600; margin-bottom:0.2rem;">Sampai Tanggal</label>
+                <input type="date" name="date_to" value="{{ $dateTo }}"
+                    style="border:1.5px solid #e5e7eb; border-radius:0.5rem; padding:0.3rem 0.55rem; font-size:0.8rem; font-family:'Poppins',sans-serif; color:#374151;">
+            </div>
+            <button type="submit" style="background:#dc2626; color:white; border:none; border-radius:0.5rem; padding:0.38rem 1rem; font-size:0.8rem; font-weight:600; font-family:'Poppins',sans-serif; cursor:pointer;">Filter</button>
+            @if($dateFrom || $dateTo)
+            <a href="/admin/dashboard?{{ http_build_query(array_filter(['status' => request('status'), 'sesi' => request('sesi')])) }}"
+               style="font-size:0.78rem; color:#6b7280; text-decoration:none; align-self:center;">Reset tanggal</a>
+            @endif
+        </form>
+
         <div class="filter-bar">
-            <a href="/admin/dashboard{{ $baseSesi }}"
+            <a href="/admin/dashboard{{ $baseSesi }}{{ $appendDate }}"
                class="filter-tab {{ !request('status') ? 'active-all' : 'inactive' }}">Semua</a>
-            <a href="/admin/dashboard?status=unchecked{{ $appendSesi }}"
+            <a href="/admin/dashboard?status=unchecked{{ $appendSesi }}{{ $appendDate }}"
                class="filter-tab {{ request('status') == 'unchecked' ? 'active-unchecked' : 'inactive' }}">Unchecked</a>
-            <a href="/admin/dashboard?status=paid{{ $appendSesi }}"
+            <a href="/admin/dashboard?status=paid{{ $appendSesi }}{{ $appendDate }}"
                class="filter-tab {{ request('status') == 'paid' ? 'active-paid' : 'inactive' }}">Paid</a>
-            <a href="/admin/dashboard?status=waiting{{ $appendSesi }}"
+            <a href="/admin/dashboard?status=waiting{{ $appendSesi }}{{ $appendDate }}"
                class="filter-tab {{ request('status') == 'waiting' ? 'active-waiting' : 'inactive' }}">⏳ Waiting</a>
-            <a href="/admin/dashboard?status=process{{ $appendSesi }}"
+            <a href="/admin/dashboard?status=process{{ $appendSesi }}{{ $appendDate }}"
                class="filter-tab {{ request('status') == 'process' ? 'active-process' : 'inactive' }}">🔧 Process</a>
-            <a href="/admin/dashboard?status=ready{{ $appendSesi }}"
+            <a href="/admin/dashboard?status=ready{{ $appendSesi }}{{ $appendDate }}"
                class="filter-tab {{ request('status') == 'ready' ? 'active-ready' : 'inactive' }}">✅ Ready</a>
-            <a href="/admin/dashboard?status=delivered{{ $appendSesi }}"
+            <a href="/admin/dashboard?status=delivered{{ $appendSesi }}{{ $appendDate }}"
                class="filter-tab {{ request('status') == 'delivered' ? 'active-delivered' : 'inactive' }}">🚚 Delivered</a>
         </div>
         <div class="filter-bar" style="margin-bottom: 1.25rem;">
-            <a href="/admin/dashboard{{ $baseStatus }}"
+            <a href="/admin/dashboard{{ $baseStatus }}{{ $appendDate }}"
                class="filter-tab {{ !request('sesi') ? 'active-all' : 'inactive' }}">Semua Sesi</a>
-            <a href="/admin/dashboard?sesi=sesi1{{ $appendStatus }}"
+            <a href="/admin/dashboard?sesi=sesi1{{ $appendStatus }}{{ $appendDate }}"
                class="filter-tab {{ request('sesi') == 'sesi1' ? 'active-process' : 'inactive' }}">🕙 Sesi 1 (10:00–12:00)</a>
-            <a href="/admin/dashboard?sesi=sesi2{{ $appendStatus }}"
+            <a href="/admin/dashboard?sesi=sesi2{{ $appendStatus }}{{ $appendDate }}"
                class="filter-tab {{ request('sesi') == 'sesi2' ? 'active-ready' : 'inactive' }}">🕙 Sesi 2 (15:00–17:00)</a>
         </div>
 

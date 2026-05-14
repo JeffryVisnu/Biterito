@@ -53,6 +53,17 @@ class AdminController extends Controller
             $query->where('delivery_session', $request->sesi);
         }
 
+        if ($request->date_from) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->date_to) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        $dateFrom = $request->date_from;
+        $dateTo   = $request->date_to;
+
         $orders          = $query->paginate(10)->appends(request()->query());
         $totalOrders     = Order::count();
         $paidOrders      = Order::where('payment_status', 'paid')->count();
@@ -78,7 +89,8 @@ class AdminController extends Controller
         return view('admin.dashboard', compact(
             'orders', 'totalOrders', 'paidOrders', 'uncheckedOrders', 'totalRevenue',
             'waitingOrders', 'processOrders', 'readyOrders', 'deliveredOrders',
-            'productSummary', 'recapFrom', 'recapTo', 'recapSesi'
+            'productSummary', 'recapFrom', 'recapTo', 'recapSesi',
+            'dateFrom', 'dateTo'
         ));
     }
 

@@ -250,10 +250,6 @@
                     📦 Pesanan diambil pada marketday 3 Juni — akan kami konfirmasi lewat WA.
                 </div>
             </div>
-            <div class="form-group">
-                <label class="form-label">Alamat Pengiriman *</label>
-                <textarea id="delivery_address" placeholder="Masukkan alamat lengkap kamu" rows="3" class="form-input" style="resize: vertical;"></textarea>
-            </div>
         </div>
 
         <button onclick="checkout()" class="checkout-btn">💳 Bayar Sekarang</button>
@@ -347,9 +343,8 @@
         const name = document.getElementById('customer_name').value.trim();
         const phoneRaw = document.getElementById('customer_phone').value.trim();
         const phone = '62' + phoneRaw.replace(/^0+/, '');
-        const address = document.getElementById('delivery_address').value.trim();
-        if (!name || !phoneRaw || !address) {
-            showToast('⚠️ Nama, WhatsApp, dan alamat wajib diisi!');
+        if (!name || !phoneRaw) {
+            showToast('⚠️ Nama dan WhatsApp wajib diisi!');
             return;
         }
         if (cart.length === 0) {
@@ -371,7 +366,6 @@
                 body: JSON.stringify({
                     customer_name: name,
                     customer_phone: phone,
-                    delivery_address: address,
                     items: cart
                 })
             });

@@ -247,34 +247,12 @@
                     <input type="text" id="customer_phone" placeholder="8xxxxxxxxxx" style="flex:1; border:none; outline:none; padding:0.55rem 0.9rem; font-size:0.9rem; font-family:'Fredoka',sans-serif; background:transparent; color:#400a0f; width:0;">
                 </div>
                 <div style="margin-top:0.5rem; background:#fff8e6; border:1.5px solid #f6c30a; border-radius:0.65rem; padding:0.6rem 0.85rem; font-size:0.82rem; color:#7a5a00; font-family:'Fredoka',sans-serif;">
-                    📦 Pesanan akan dikirim pada <strong>Kamis, 21 Mei 2026</strong>. Pilih sesi pengiriman di bawah.
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Sesi Pengiriman *</label>
-                <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
-                    <label style="flex:1; min-width:120px; cursor:pointer;">
-                        <input type="radio" name="delivery_session" id="sesi1" value="sesi1" style="display:none;">
-                        <div class="sesi-card" data-sesi="sesi1">
-                            <div style="font-weight:700; font-size:0.95rem;">Sesi 1</div>
-                            <div style="font-size:0.85rem; color:#7a5a5a;">10:00 – 12:00</div>
-                        </div>
-                    </label>
-                    <label style="flex:1; min-width:120px; cursor:pointer;">
-                        <input type="radio" name="delivery_session" id="sesi2" value="sesi2" style="display:none;">
-                        <div class="sesi-card" data-sesi="sesi2">
-                            <div style="font-weight:700; font-size:0.95rem;">Sesi 2</div>
-                            <div style="font-size:0.85rem; color:#7a5a5a;">15:00 – 17:00</div>
-                        </div>
-                    </label>
+                    📦 Pesanan diambil pada marketday 3 Juni — akan kami konfirmasi lewat WA.
                 </div>
             </div>
             <div class="form-group">
                 <label class="form-label">Alamat Pengiriman *</label>
                 <textarea id="delivery_address" placeholder="Masukkan alamat lengkap kamu" rows="3" class="form-input" style="resize: vertical;"></textarea>
-                <div style="margin-top:0.5rem; background:#f0fdf4; border:1.5px solid #86efac; border-radius:0.65rem; padding:0.6rem 0.85rem; font-size:0.82rem; color:#15803d; font-family:'Fredoka',sans-serif;">
-                    🚚 <strong>Ongkir gratis</strong> untuk radius 3 km dari Telkom University. Jika melebihi radius, admin akan menghubungi kamu untuk konfirmasi ongkir tambahan.
-                </div>
             </div>
         </div>
 
@@ -370,15 +348,8 @@
         const phoneRaw = document.getElementById('customer_phone').value.trim();
         const phone = '62' + phoneRaw.replace(/^0+/, '');
         const address = document.getElementById('delivery_address').value.trim();
-        const sessionEl = document.querySelector('input[name="delivery_session"]:checked');
-        const deliverySession = sessionEl ? sessionEl.value : '';
-
         if (!name || !phoneRaw || !address) {
             showToast('⚠️ Nama, WhatsApp, dan alamat wajib diisi!');
-            return;
-        }
-        if (!deliverySession) {
-            showToast('⚠️ Pilih sesi pengiriman terlebih dahulu!');
             return;
         }
         if (cart.length === 0) {
@@ -401,7 +372,6 @@
                     customer_name: name,
                     customer_phone: phone,
                     delivery_address: address,
-                    delivery_session: deliverySession,
                     items: cart
                 })
             });
